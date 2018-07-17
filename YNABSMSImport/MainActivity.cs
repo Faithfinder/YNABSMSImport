@@ -28,8 +28,8 @@ namespace YNABSMSImport
         private void BtnSMSImitator_Click(object sender, System.EventArgs e)
         {
             Intent message = new Intent("YNABSMSImport.SMSImitation");
-            // If desired, pass some values to the broadcast receiver.
-            message.PutExtra("key", "value");
+            
+            message.PutExtra("pdus22", "value");
             SendBroadcast(message);
         }
     }

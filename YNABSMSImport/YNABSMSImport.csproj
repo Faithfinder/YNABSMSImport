@@ -55,6 +55,7 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SMSProcessor.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="SMSReceiver.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

@@ -21,32 +21,24 @@ namespace YNABSMSImport
 
         public override void OnReceive(Context context, Intent intent)
         {
-            if (intent.HasExtra("pdus")){
+            if (intent.HasExtra("pdus"))
+            {
                 var messages = Telephony.Sms.Intents.GetMessagesFromIntent(intent);
 
-                var notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
-
-                var i = 0;
                 foreach (var message in messages)
                 {
-                    var DisplayText = $"From: {message.DisplayOriginatingAddress}, Text: {message.DisplayMessageBody}, Number{++i}";
-
-                    var handler = new Handler();
-                    handler.Post(() => {
-                        Toast.MakeText(context, DisplayText, ToastLength.Short).Show();
-                    });
-
-                    
-
-                    var notification = new Notification.Builder(context)
-                        .SetContentTitle("SMS")
-                        .SetContentText(DisplayText)
-                        .SetSmallIcon(Resource.Drawable.ic_stat_beach_access).Build();
-
-
-                    notificationManager.Notify(i, notification);
+                    StartProcessing(context, message);
                 }
             }
+        }
+
+        private void StartProcessing(Context context, Android.Telephony.SmsMessage message)
+        {
+            Intent smsProcessor = new Intent(context, typeof(SMSProcessor));
+            smsProcessor.PutExtra("Address", message.DisplayOriginatingAddress);
+            smsProcessor.PutExtra("Message", message.DisplayMessageBody);
+
+            context.StartService(smsProcessor);
         }
     }
 }

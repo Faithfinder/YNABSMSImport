@@ -2,6 +2,7 @@
 using Android.Widget;
 using Android.OS;
 using Android.Support.V7.App;
+using Android.Content;
 
 namespace YNABSMSImport
 {
@@ -12,8 +13,18 @@ namespace YNABSMSImport
         {
             base.OnCreate(savedInstanceState);
 
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
+
+            var btnSMSImitator = FindViewById<Button>(Resource.Id.btnSMSImitator);
+            btnSMSImitator.Click += BtnSMSImitator_Click;
+        }
+
+        private void BtnSMSImitator_Click(object sender, System.EventArgs e)
+        {
+            Intent message = new Intent("YNABSMSImport.SMSImitation");
+            // If desired, pass some values to the broadcast receiver.
+            message.PutExtra("key", "value");
+            SendBroadcast(message);
         }
     }
 }

@@ -18,24 +18,35 @@ namespace YNABSMSImport
     public class SMSReceiver : BroadcastReceiver
     {
         public const string INTENT_ACTION = Telephony.Sms.Intents.SmsReceivedAction;
-        private static readonly int NotificationId = 1934;
 
         public override void OnReceive(Context context, Intent intent)
         {
-            // Instantiate the builder and set notification elements:
-            Notification.Builder builder = new Notification.Builder(context)
-                .SetContentTitle("Sample Notification")
-                .SetContentText("Hello World! This is my first notification!")
-                .SetSmallIcon(Resource.Drawable.ic_stat_beach_access);
+            if (intent.HasExtra("pdus")){
+                var messages = Telephony.Sms.Intents.GetMessagesFromIntent(intent);
 
-            // Build the notification:
-            Notification notification = builder.Build();
+                var notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
 
-            // Get the notification manager:
-            var notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
+                var i = 0;
+                foreach (var message in messages)
+                {
+                    var DisplayText = $"From: {message.DisplayOriginatingAddress}, Text: {message.DisplayMessageBody}, Number{++i}";
 
-            // Publish the notification:            
-            notificationManager.Notify(NotificationId, notification);
+                    var handler = new Handler();
+                    handler.Post(() => {
+                        Toast.MakeText(context, DisplayText, ToastLength.Short).Show();
+                    });
+
+                    
+
+                    var notification = new Notification.Builder(context)
+                        .SetContentTitle("SMS")
+                        .SetContentText(DisplayText)
+                        .SetSmallIcon(Resource.Drawable.ic_stat_beach_access).Build();
+
+
+                    notificationManager.Notify(i, notification);
+                }
+            }
         }
     }
 }

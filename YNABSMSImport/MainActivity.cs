@@ -3,6 +3,8 @@ using Android.Widget;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Content;
+using Android;
+using Android.Content.PM;
 
 namespace YNABSMSImport
 {
@@ -15,6 +17,10 @@ namespace YNABSMSImport
 
             SetContentView(Resource.Layout.activity_main);
 
+            if (CheckSelfPermission(Manifest.Permission.ReceiveSms) != Permission.Granted)
+            {
+                RequestPermissions(new[] { Manifest.Permission.ReceiveSms }, 0);
+            }
             var btnSMSImitator = FindViewById<Button>(Resource.Id.btnSMSImitator);
             btnSMSImitator.Click += BtnSMSImitator_Click;
         }

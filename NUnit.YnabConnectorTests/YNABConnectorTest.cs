@@ -14,15 +14,15 @@ namespace NUnit.YnabConnectorTests
     {
         public YNABConnectorTest() => AccessToken = ApiKeys.AccessToken;
 
-        private readonly string AccessToken;
-
         [Test]
         public void GetBudgetTest()
         {
-            var ynabClient = new YNABClient(AccessToken);
+            var ynabClient = YNABClient.Instance;
             var budget = ynabClient.GetBudgets();
             Debug.WriteLine(budget);
             Assert.That(budget is string);
         }
+
+        private readonly string AccessToken;
     }
 }

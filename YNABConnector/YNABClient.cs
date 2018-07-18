@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace YNABConnector
 {
@@ -19,12 +19,15 @@ namespace YNABConnector
             }
         }
 
-        public string GetBudgets()
+        public dynamic GetBudgetsAsync()
         {
-            HttpResponseMessage response = client.GetAsync("v1/budgets").Result;
-            var result = "";
-            if (response.IsSuccessStatusCode)
-                result = response.Content.ReadAsStringAsync().Result;
+            var response = client.GetAsync("v1/budgets").Result;
+
+            response.EnsureSuccessStatusCode();
+
+            var json = response.Content.ReadAsStringAsync().Result;
+
+            var result = JsonConvert.DeserializeObject(json);
 
             return result;
         }

@@ -1,4 +1,4 @@
-﻿namespace NUnit.YnabConnectorTests
+﻿namespace YNABConnector
 {
     public static partial class ApiKeys
     {

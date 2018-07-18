@@ -12,10 +12,7 @@ namespace NUnit.YnabConnectorTests
     [TestFixture]
     public class YNABConnectorTest
     {
-        public YNABConnectorTest()
-        {
-            AccessToken = Resources.AccessToken;
-        }
+        public YNABConnectorTest() => AccessToken = ApiKeys.AccessToken;
 
         private readonly string AccessToken;
 

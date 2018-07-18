@@ -38,11 +38,6 @@
   <ItemGroup>
     <Compile Include="ApiKeysLocal.cs" />
     <Compile Include="ApiKeys.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="YNABConnectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -55,15 +50,9 @@
       <Name>YNABConnector</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd $(ProjectDir)APIKeys\
+    <PreBuildEvent>cd $(ProjectDir)
 
 if not exist APIKeysLocal.cs (
     type nul &gt; APIKeysLocal.cs

@@ -48,9 +48,13 @@
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
     <Compile Include="ApiKeysLocal.cs" />
+    <Compile Include="YNABObjectModel\BudgetSummary.cs" />
     <Compile Include="YNABClient.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YNABObjectModel\BudgetSummaryWrapper.cs" />
+    <Compile Include="YNABObjectModel\BudgetSummaryResponse.cs" />
+    <Compile Include="YNABObjectModel\DateFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

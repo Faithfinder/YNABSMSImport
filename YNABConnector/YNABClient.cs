@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using YNABConnector.YNABObjectModel;
 
 namespace YNABConnector
 {
@@ -27,7 +28,7 @@ namespace YNABConnector
 
             var json = response.Content.ReadAsStringAsync().Result;
 
-            var result = JsonConvert.DeserializeObject(json);
+            var result = JsonConvert.DeserializeObject<BudgetSummaryResponse>(json);
 
             return result;
         }

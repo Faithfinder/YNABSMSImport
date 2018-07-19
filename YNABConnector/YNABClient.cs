@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using YNABConnector.Exceptions;
 using YNABConnector.YNABObjectModel;
 
 namespace YNABConnector
@@ -20,21 +23,21 @@ namespace YNABConnector
             }
         }
 
-        public dynamic GetBudgetsAsync()
+        public async Task<List<BudgetSummary>> GetBudgetsAsync()
         {
-            var response = client.GetAsync("v1/budgets").Result;
+            var response = await client.GetAsync(YNABPaths.Budgets);
+            var json = await response.Content.ReadAsStringAsync();
 
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+                throw DeserializeToException(json);
 
-            var json = response.Content.ReadAsStringAsync().Result;
-
-            var result = JsonConvert.DeserializeObject<BudgetSummaryResponse>(json);
-
-            return result;
+            return ExtractBudgets(json);
         }
 
         private static YNABClient instance;
+
         private readonly string accessToken;
+
         private HttpClient client;
 
         private YNABClient()
@@ -52,6 +55,18 @@ namespace YNABConnector
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        private Exception DeserializeToException(string json)
+        {
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(json);
+            return ExceptionFactory.GenerateExceptionFromErrorResponse(errorResponse);
+        }
+
+        private List<BudgetSummary> ExtractBudgets(string json)
+        {
+            var budgetSummaryResponse = JsonConvert.DeserializeObject<SuccessResponse<BudgetSummaryWrapper>>(json);
+            return budgetSummaryResponse.data.budgets;
         }
     }
 }

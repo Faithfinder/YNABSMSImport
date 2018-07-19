@@ -1,22 +1,20 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using YNABConnector;
+using YNABConnector.YNABObjectModel;
 
 namespace NUnit.YnabConnectorTests
 {
     [TestFixture]
     public class YNABConnectorTest
     {
-        public YNABConnectorTest() => AccessToken = ApiKeys.AccessToken;
-
         [Test]
-        public void GetBudgetTest()
+        public void GetBudgetsTest()
         {
             var ynabClient = YNABClient.Instance;
-            var budget = ynabClient.GetBudgetsAsync();
+            var budget = ynabClient.GetBudgetsAsync().Result;
 
-            Assert.That(budget is string);
+            Assert.That(budget is List<BudgetSummary>);
         }
-
-        private readonly string AccessToken;
     }
 }

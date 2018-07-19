@@ -56,10 +56,10 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YNABObjectModel\BudgetSummaryWrapper.cs" />
-    <Compile Include="YNABObjectModel\BudgetSummaryResponse.cs" />
     <Compile Include="YNABObjectModel\DateFormat.cs" />
     <Compile Include="YNABObjectModel\ErrorDetail.cs" />
     <Compile Include="YNABObjectModel\ErrorResponse.cs" />
+    <Compile Include="YNABObjectModel\YNABResponse.cs" />
     <Compile Include="YNABPaths.cs" />
   </ItemGroup>
   <ItemGroup>

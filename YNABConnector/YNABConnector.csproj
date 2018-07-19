@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
     <Compile Include="ApiKeysLocal.cs" />
+    <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\OtherYNABException.cs" />
+    <Compile Include="Exceptions\ExceptionFactory.cs" />
     <Compile Include="YNABObjectModel\BudgetSummary.cs" />
     <Compile Include="YNABClient.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

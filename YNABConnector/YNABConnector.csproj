@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiKeys.cs" />
-    <Compile Include="ApiKeysLocal.cs" />
+    <Compile Include="ConstantHolders\ApiKeys.cs" />
+    <Compile Include="ConstantHolders\ApiKeysLocal.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Exceptions\OtherYNABException.cs" />
     <Compile Include="Exceptions\ExceptionFactory.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="YNABObjectModel\ErrorDetail.cs" />
     <Compile Include="YNABObjectModel\ErrorResponse.cs" />
     <Compile Include="YNABObjectModel\SuccessResponse.cs" />
-    <Compile Include="YNABPaths.cs" />
+    <Compile Include="ConstantHolders\YNABPaths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -79,7 +79,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd $(ProjectDir)
+    <PreBuildEvent>cd $(ProjectDir)ConstantHolders/
 
 if not exist APIKeysLocal.cs (
     type nul &gt; APIKeysLocal.cs

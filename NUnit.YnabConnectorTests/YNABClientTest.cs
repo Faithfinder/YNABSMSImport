@@ -5,8 +5,8 @@ using YNABConnector.YNABObjectModel;
 
 namespace NUnit.YnabConnectorTests
 {
-    [TestFixture]
-    public class YNABConnectorTest
+    [TestFixture(TestOf = typeof(YNABClient))]
+    public class YNABClientTest
     {
         [Test]
         public void GetBudgetsTest()

@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace YNABConnector.YNABObjectModel
 {
-    internal class BudgetSummaryResponse
+    public class BudgetSummaryResponse
     {
         public BudgetSummaryWrapper data;
     }

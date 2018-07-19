@@ -12,8 +12,8 @@ using Android.Widget;
 
 namespace YNABConnector.YNABObjectModel
 {
-    public class DateFormat
+    public class ErrorResponse
     {
-        public string format;
+        public ErrorDetail error;
     }
 }

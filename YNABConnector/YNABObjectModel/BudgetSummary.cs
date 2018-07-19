@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace YNABConnector.YNABObjectModel
 {
-    internal class BudgetSummary
+    public class BudgetSummary
     {
         public DateFormat date_format;
         public Guid id;

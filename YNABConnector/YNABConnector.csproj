@@ -58,6 +58,9 @@
     <Compile Include="YNABObjectModel\BudgetSummaryWrapper.cs" />
     <Compile Include="YNABObjectModel\BudgetSummaryResponse.cs" />
     <Compile Include="YNABObjectModel\DateFormat.cs" />
+    <Compile Include="YNABObjectModel\ErrorDetail.cs" />
+    <Compile Include="YNABObjectModel\ErrorResponse.cs" />
+    <Compile Include="YNABPaths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -59,7 +59,7 @@
     <Compile Include="YNABObjectModel\DateFormat.cs" />
     <Compile Include="YNABObjectModel\ErrorDetail.cs" />
     <Compile Include="YNABObjectModel\ErrorResponse.cs" />
-    <Compile Include="YNABObjectModel\YNABResponse.cs" />
+    <Compile Include="YNABObjectModel\SuccessResponse.cs" />
     <Compile Include="YNABPaths.cs" />
   </ItemGroup>
   <ItemGroup>

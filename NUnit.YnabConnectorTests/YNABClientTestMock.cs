@@ -26,6 +26,7 @@ namespace NUnit.YnabConnectorTests
         {
             handler.QueueResponse(MockResponseHandlers.BudgetsResponse);
             var budgets = ynabClient.GetBudgetsAsync().Result;
+            Assert.That(budgets is List<BudgetSummary>);
             Assert.That(budgets.Count == 1);
             Assert.That(budgets[0].id == Guid.Parse("7ffba7b3-81b2-4ce1-a546-1b176368cc1b"));
         }

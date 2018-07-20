@@ -11,6 +11,13 @@ namespace YNABConnector
 {
     public class YNABClient
     {
+        public bool Initialized => instance is null;
+
+        /// <summary>
+        /// Get the singleton instance of YNABClient. If it's not initialized, supply constructor with handler.
+        /// </summary>
+        /// <param name="_handler">Ignored if the instance is already initialized</param>
+        /// <returns></returns>
         public static YNABClient GetInstance(HttpMessageHandler _handler)
         {
             if (instance is null)
@@ -33,26 +40,25 @@ namespace YNABConnector
 
         public async Task<List<BudgetSummary>> GetBudgetsAsync()
         {
-            var response = await client.GetAsync(YNABPaths.Budgets);
-            var json = await response.Content.ReadAsStringAsync();
-
-            if (!response.IsSuccessStatusCode)
-                throw DeserializeToException(json);
+            var json = await GetJSON(YNABPaths.Budgets);
 
             return ExtractBudgets(json);
         }
 
         private static YNABClient instance;
+
         private readonly string accessToken;
+
         private HttpClient client;
+
         private HttpMessageHandler handler;
 
-        private YNABClient(HttpMessageHandler handler)
+        private YNABClient(HttpMessageHandler _handler)
         {
             accessToken = ApiKeys.AccessToken;
-            ConstructHttpClient(handler);
+            ConstructHttpClient();
 
-            void ConstructHttpClient(HttpMessageHandler _handler)
+            void ConstructHttpClient()
             {
                 handler = _handler;
                 client = new HttpClient(_handler)
@@ -75,6 +81,17 @@ namespace YNABConnector
         {
             var budgetSummaryResponse = JsonConvert.DeserializeObject<SuccessResponse<BudgetSummaryWrapper>>(json);
             return budgetSummaryResponse.data.budgets;
+        }
+
+        private async Task<string> GetJSON(string path)
+        {
+            var response = await client.GetAsync(path);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw DeserializeToException(json);
+
+            return json;
         }
     }
 }

@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace YNABConnector.Exceptions
 {
-    internal class AuthorizationException : Exception
+    public class AuthorizationException : Exception
     {
         public AuthorizationException()
         {

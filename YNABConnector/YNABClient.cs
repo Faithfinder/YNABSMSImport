@@ -11,16 +11,24 @@ namespace YNABConnector
 {
     public class YNABClient
     {
-        public static YNABClient Instance
+        public static YNABClient GetInstance(HttpMessageHandler _handler)
         {
-            get
+            if (instance is null)
             {
-                if (instance is null)
-                {
-                    instance = new YNABClient();
-                }
-                return instance;
+                instance = new YNABClient(_handler);
             }
+
+            return instance;
+        }
+
+        public static YNABClient GetInstance()
+        {
+            return GetInstance(new HttpClientHandler());
+        }
+
+        public static void ResetInstance()
+        {
+            instance = null;
         }
 
         public async Task<List<BudgetSummary>> GetBudgetsAsync()
@@ -35,26 +43,26 @@ namespace YNABConnector
         }
 
         private static YNABClient instance;
-
         private readonly string accessToken;
-
         private HttpClient client;
+        private HttpMessageHandler handler;
 
-        private YNABClient()
+        private YNABClient(HttpMessageHandler handler)
         {
             accessToken = ApiKeys.AccessToken;
-            ConstructHttpClient();
-        }
+            ConstructHttpClient(handler);
 
-        private void ConstructHttpClient()
-        {
-            client = new HttpClient()
+            void ConstructHttpClient(HttpMessageHandler _handler)
             {
-                BaseAddress = new Uri("https://api.youneedabudget.com/")
-            };
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                handler = _handler;
+                client = new HttpClient(_handler)
+                {
+                    BaseAddress = new Uri(YNABPaths.Base)
+                };
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
         }
 
         private Exception DeserializeToException(string json)

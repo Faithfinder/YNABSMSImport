@@ -31,6 +31,15 @@ namespace NUnit.YnabConnectorTests
             Assert.That(budgets[0].id == Guid.Parse("7ffba7b3-81b2-4ce1-a546-1b176368cc1b"));
         }
 
+        [Test]
+        [Category("Mocked")]
+        public void ParseCultureInfo()
+        {
+            handler.QueueResponse(MockResponseHandlers.BudgetsResponse);
+            var budgets = ynabClient.GetBudgetsAsync().Result;
+            Assert.That(budgets[0].ExtractCultureInfo() is System.Globalization.CultureInfo);
+        }
+
         [OneTimeSetUp]
         public void Setup()
         {

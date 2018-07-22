@@ -22,22 +22,26 @@ namespace NUnit.YnabConnectorTests
 
         [Test]
         [Category("Mocked")]
+        public void GetAccountsParsedCorrectly()
+        {
+            handler.QueueResponse(MockResponseHandlers.AccountsResponse);
+            var budgets = ynabClient.GetAccountsAsync(new BudgetSummary { Id = Guid.Empty }).Result;
+            Assert.That(budgets is List<Account>);
+            Assert.That(budgets.Count == 1);
+            Assert.That(budgets[0].Id == Guid.Empty, "Incorect Id");
+            Assert.That(budgets[0].Name == "TestAccount", "Incorrect account name");
+        }
+
+        [Test]
+        [Category("Mocked")]
         public void GetBudgetsParsedCorrectly()
         {
             handler.QueueResponse(MockResponseHandlers.BudgetsResponse);
             var budgets = ynabClient.GetBudgetsAsync().Result;
             Assert.That(budgets is List<BudgetSummary>);
             Assert.That(budgets.Count == 1);
-            Assert.That(budgets[0].id == Guid.Parse("7ffba7b3-81b2-4ce1-a546-1b176368cc1b"));
-        }
-
-        [Test]
-        [Category("Mocked")]
-        public void ParseCultureInfo()
-        {
-            handler.QueueResponse(MockResponseHandlers.BudgetsResponse);
-            var budgets = ynabClient.GetBudgetsAsync().Result;
-            Assert.That(budgets[0].ExtractCultureInfo() is System.Globalization.CultureInfo);
+            Assert.That(budgets[0].Id == Guid.Parse("00000000-0000-0000-0000-000000000000"));
+            Assert.That(budgets[0].Name == "Test budget");
         }
 
         [OneTimeSetUp]

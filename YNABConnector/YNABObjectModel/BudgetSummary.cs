@@ -5,16 +5,10 @@ namespace YNABConnector.YNABObjectModel
 {
     public class BudgetSummary
     {
-        public CurrencyFormat currency_format;
-        public DateFormat date_format;
-        public Guid id;
-        public DateTime last_modified_on;
-        public string name;
-
-        public CultureInfo ExtractCultureInfo()
-        {
-            var result = currency_format.ToCultureInfo();
-            return result;
-        }
+        public CurrencyFormat Currency_format { get; set; }
+        public DateFormat Date_format { get; set; }
+        public Guid Id { get; set; }
+        public DateTime Last_modified_on { get; set; }
+        public string Name { get; set; }
     }
 }

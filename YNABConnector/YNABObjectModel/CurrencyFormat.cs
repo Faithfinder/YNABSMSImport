@@ -13,25 +13,27 @@ namespace YNABConnector.YNABObjectModel
         public string iso_code;
         public bool symbol_first;
 
-        public CultureInfo ToCultureInfo()
+        public NumberFormatInfo ToNumberFormatInfo()
         {
-            var result = new CultureInfo(iso_code);
-            result.NumberFormat.CurrencyDecimalDigits = decimal_digits;
-            result.NumberFormat.CurrencyDecimalSeparator = decimal_separator;
-            result.NumberFormat.CurrencyGroupSeparator = group_separator;
-            result.NumberFormat.CurrencySymbol = display_symbol ? currency_symbol : "";
+            var NumberFormatInfo = new NumberFormatInfo
+            {
+                CurrencyDecimalDigits = decimal_digits,
+                CurrencyDecimalSeparator = decimal_separator,
+                CurrencyGroupSeparator = group_separator,
+                CurrencySymbol = display_symbol ? currency_symbol : ""
+            };
             if (symbol_first)
             {
-                result.NumberFormat.CurrencyNegativePattern = (int)CurrencyNegativePatterns.SignSymbolAmount;
-                result.NumberFormat.CurrencyPositivePattern = (int)CurrencyPositivePatterns.SymbolAmount;
+                NumberFormatInfo.CurrencyNegativePattern = (int)CurrencyNegativePatterns.SignSymbolAmount;
+                NumberFormatInfo.CurrencyPositivePattern = (int)CurrencyPositivePatterns.SymbolAmount;
             }
             else
             {
-                result.NumberFormat.CurrencyNegativePattern = (int)CurrencyNegativePatterns.SignAmountSymbol;
-                result.NumberFormat.CurrencyPositivePattern = (int)CurrencyPositivePatterns.AmountSymbol;
+                NumberFormatInfo.CurrencyNegativePattern = (int)CurrencyNegativePatterns.SignAmountSymbol;
+                NumberFormatInfo.CurrencyPositivePattern = (int)CurrencyPositivePatterns.AmountSymbol;
             }
 
-            return result;
+            return NumberFormatInfo;
         }
     }
 }

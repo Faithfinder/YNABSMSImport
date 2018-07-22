@@ -342,3 +342,5 @@ ASALocalRun/
 NUnit\.YnabConnectorTests/ApiKeysLocal\.cs
 
 YNABConnector/ApiKeysLocal\.cs
+
+YNABConnector/ConstantHolders/ApiKeysLocal\.cs

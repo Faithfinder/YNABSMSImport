@@ -59,11 +59,14 @@ namespace YNABConnector
             return ExtractTransaction(responseJson);
         }
 
+        public void RefreshAccessToken(string accessToken)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
         private const string JSON_CONTENT_TYPE = "application/json";
 
         private static YNABClient instance;
-
-        private readonly string accessToken;
 
         private HttpClient client;
 
@@ -71,7 +74,6 @@ namespace YNABConnector
 
         private YNABClient(HttpMessageHandler _handler)
         {
-            accessToken = ApiKeys.AccessToken;
             ConstructHttpClient();
 
             void ConstructHttpClient()
@@ -83,7 +85,6 @@ namespace YNABConnector
                 };
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader());
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
 

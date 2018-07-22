@@ -52,6 +52,7 @@ namespace NUnit.YnabConnectorTests
         {
             handler = new HttpClientHandler();
             ynabClient = YNABClient.GetInstance(handler);
+            ynabClient.RefreshAccessToken(ApiKeys.AccessToken);
         }
 
         [OneTimeTearDown]

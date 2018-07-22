@@ -5,6 +5,9 @@ using Android.Support.V7.App;
 using Android.Content;
 using Android;
 using Android.Content.PM;
+using Xamarin.Auth;
+using System;
+using YNABConnector;
 
 namespace YNABSMSImport
 {
@@ -21,17 +24,39 @@ namespace YNABSMSImport
             {
                 RequestPermissions(new[] { Manifest.Permission.ReceiveSms }, 0);
             }
-            var btnSMSImitator = FindViewById<Button>(Resource.Id.btnSMSImitator);
-            btnSMSImitator.Click += BtnSMSImitator_Click;
+            var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
+            btnAuthorize.Click += BtnbtnAuthorize_Click;
         }
 
-        private void BtnSMSImitator_Click(object sender, System.EventArgs e)
+        private void BtnbtnAuthorize_Click(object sender, EventArgs e)
         {
-            Intent message = new Intent("YNABSMSImport.SMSImitation");
-            
-            message.PutExtra("pdus22", "value");
-            SendBroadcast(message);
+            OAuth2Authenticator auth = new OAuth2Authenticator
+                (
+                    clientId: ApiKeys.ClientID,
+                    scope: "",
+                    authorizeUrl: new Uri("https://app.youneedabudget.com/oauth/authorize"),
+                    redirectUrl: new Uri("https://localhost")
+
+                );
+
+            auth.Completed += (sender1, eventArgs1) =>
+            {
+                // UI presented, so it's up to us to dimiss it on Android
+                // dismiss Activity with WebView or CustomTabs
+                //Finish();
+
+                if (eventArgs1.IsAuthenticated)
+                {
+                    var handler = new Handler();
+                    handler.Post(() => { Toast.MakeText(this, "Authenticated", ToastLength.Long); });
+                }
+                else
+                {
+                    // The user cancelled
+                }
+            };
+
+            StartActivity(auth.GetUI(this));
         }
     }
 }
-

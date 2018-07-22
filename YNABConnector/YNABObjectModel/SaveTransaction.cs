@@ -26,7 +26,7 @@ namespace YNABConnector.YNABObjectModel
         [JsonConverter(typeof(StringEnumConverter))]
         public FlagColor? Flag_color { get; set; }
 
-        public Guid? Import_id { get; set; }
+        public string Import_id { get; set; }
 
         public string Memo { get; set; }
 

@@ -44,6 +44,36 @@ namespace NUnit.YnabConnectorTests
             Assert.That(budgets[0].Name == "Test budget");
         }
 
+        [Test]
+        [Category("Mocked")]
+        public void PostTransaction()
+        {
+            handler.QueueResponse(MockResponseHandlers.PostTransactionResponse);
+            var saveTransaction = new SaveTransaction
+            {
+                Account_id = Guid.Empty,
+                Amount = 100000,
+                Payee_name = "Test Payee"
+            };
+            var transaction = ynabClient.PostTransactionAsync(new BudgetSummary { Id = Guid.Empty }, saveTransaction).Result;
+            Assert.That(transaction is TransactionDetail);
+        }
+
+        [Test]
+        [Category("Mocked")]
+        public void PostTransactionDoubleImportID()
+        {
+            handler.QueueResponse(MockResponseHandlers.ImportIDExists);
+            var saveTransaction = new SaveTransaction
+            {
+                Account_id = Guid.Empty,
+                Amount = 100000,
+                Payee_name = "Test Payee",
+                Import_id = "double"
+            };
+            Assert.ThrowsAsync<DuplicateImportIdException>(async () => await ynabClient.PostTransactionAsync(new BudgetSummary { Id = Guid.Empty }, saveTransaction));
+        }
+
         [OneTimeSetUp]
         public void Setup()
         {

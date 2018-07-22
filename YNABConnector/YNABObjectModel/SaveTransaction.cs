@@ -24,7 +24,7 @@ namespace YNABConnector.YNABObjectModel
         public DateTime Date { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public FlagColor Flag_color { get; set; }
+        public FlagColor? Flag_color { get; set; }
 
         public Guid? Import_id { get; set; }
 

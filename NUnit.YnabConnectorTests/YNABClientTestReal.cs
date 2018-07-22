@@ -31,6 +31,20 @@ namespace NUnit.YnabConnectorTests
             Assert.That(budgets is List<BudgetSummary>);
         }
 
+        [Test]
+        [Category("Real")]
+        public void PostTransactionTest()
+        {
+            var budgets = ynabClient.GetBudgetsAsync().Result;
+            var accounts = ynabClient.GetAccountsAsync(budgets[0]).Result;
+            var saveTransaction = new SaveTransaction
+            {
+                Account_id = accounts[0].Id,
+                Amount = 100000,
+                Payee_name = "Test Payee"
+            };
+            var transaction = ynabClient.PostTransactionAsync(budgets[0], saveTransaction).Result;
+            Assert.That(transaction is TransactionDetail);
         }
 
         [OneTimeSetUp]

@@ -52,6 +52,12 @@ namespace YNABConnector
             return ExtractBudgets(json);
         }
 
+        public async Task<TransactionDetail> PostTransactionAsync(BudgetSummary budgetSummary, SaveTransaction saveTransaction)
+        {
+            var postJson = saveTransaction.Wrap().Serialize();
+            var responseJson = await PostJSON(YNABPaths.Transactions(budgetSummary.Id), ConstructHttpContent(postJson));
+            return ExtractTransaction(responseJson);
+        }
 
         private const string JSON_CONTENT_TYPE = "application/json";
 
@@ -111,6 +117,12 @@ namespace YNABConnector
             return budgetSummaryResponse.data.budgets;
         }
 
+        private TransactionDetail ExtractTransaction(string json)
+        {
+            var transactionResponse = JsonConvert.DeserializeObject<SuccessResponse<TransactionWrapper>>(json);
+            return transactionResponse.data.Transaction;
+        }
+
         private async Task<string> GetJSON(string path)
         {
             var response = await client.GetAsync(path);
@@ -125,6 +137,12 @@ namespace YNABConnector
                 throw DeserializeToException(json);
 
             return json;
+        }
+
+        private async Task<string> PostJSON(string path, HttpContent content)
+        {
+            var response = await client.PostAsync(path, content);
+            return await ParseResponse(response);
         }
     }
 }

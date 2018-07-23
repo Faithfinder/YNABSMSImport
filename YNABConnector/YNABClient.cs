@@ -11,7 +11,7 @@ namespace YNABConnector
 {
     public class YNABClient
     {
-        public bool Initialized => instance is null;
+        public bool Initialized => !(instance is null);
 
         /// <summary>
         /// Get the singleton instance of YNABClient. If it's not initialized, supply constructor with handler.
@@ -74,18 +74,13 @@ namespace YNABConnector
 
         private YNABClient(HttpMessageHandler _handler)
         {
-            ConstructHttpClient();
-
-            void ConstructHttpClient()
+            handler = _handler;
+            client = new HttpClient(_handler)
             {
-                handler = _handler;
-                client = new HttpClient(_handler)
-                {
-                    BaseAddress = new Uri(YNABPaths.Base)
-                };
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader());
-            }
+                BaseAddress = new Uri(YNABPaths.Base)
+            };
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader());
         }
 
         private static StringContent ConstructHttpContent(string Json)

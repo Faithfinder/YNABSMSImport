@@ -28,10 +28,7 @@ namespace YNABConnector
             return instance;
         }
 
-        public static YNABClient GetInstance()
-        {
-            return GetInstance(new HttpClientHandler());
-        }
+        public static YNABClient GetInstance() => GetInstance(new HttpClientHandler());
 
         public static void ResetInstance()
         {

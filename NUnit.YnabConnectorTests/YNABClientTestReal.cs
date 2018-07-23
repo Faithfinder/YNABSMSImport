@@ -50,8 +50,7 @@ namespace NUnit.YnabConnectorTests
         [OneTimeSetUp]
         public void Setup()
         {
-            handler = new HttpClientHandler();
-            ynabClient = YNABClient.GetInstance(handler);
+            ynabClient = YNABClient.GetInstance();
             ynabClient.RefreshAccessToken(ApiKeys.AccessToken);
         }
 
@@ -61,7 +60,6 @@ namespace NUnit.YnabConnectorTests
             YNABClient.ResetInstance();
         }
 
-        private HttpClientHandler handler;
         private YNABClient ynabClient;
     }
 }

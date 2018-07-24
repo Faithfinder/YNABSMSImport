@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,5 +11,4 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="cd $(ProjectDir)ConstantHolders/ &#xD;&#xA; &#xD;&#xA;if not exist APIKeysLocal.cs ( &#xD;&#xA;    type nul &gt; APIKeysLocal.cs &#xD;&#xA;)" />
   </Target>
-
 </Project>

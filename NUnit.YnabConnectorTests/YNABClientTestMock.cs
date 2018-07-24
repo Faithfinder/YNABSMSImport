@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using YNABConnector;
 using YNABConnector.YNABObjectModel;
 using YNABConnector.Exceptions;
@@ -16,7 +14,7 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void ErrorUnauthorized()
         {
-            handler.QueueResponse(MockResponseHandlers.Unauthorized);
+            handler.QueueResponse(MockResponseMessages.Unauthorized);
             Assert.ThrowsAsync<AuthorizationException>(async () => await ynabClient.GetBudgetsAsync());
         }
 
@@ -24,7 +22,7 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void GetAccountsParsedCorrectly()
         {
-            handler.QueueResponse(MockResponseHandlers.AccountsResponse);
+            handler.QueueResponse(MockResponseMessages.AccountsResponse);
             var budgets = ynabClient.GetAccountsAsync(new BudgetSummary { Id = Guid.Empty }).Result;
             Assert.That(budgets is List<Account>);
             Assert.That(budgets.Count == 1);
@@ -36,7 +34,7 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void GetBudgetsParsedCorrectly()
         {
-            handler.QueueResponse(MockResponseHandlers.BudgetsResponse);
+            handler.QueueResponse(MockResponseMessages.BudgetsResponse);
             var budgets = ynabClient.GetBudgetsAsync().Result;
             Assert.That(budgets is List<BudgetSummary>);
             Assert.That(budgets.Count == 1);
@@ -48,7 +46,7 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void PostTransaction()
         {
-            handler.QueueResponse(MockResponseHandlers.PostTransactionResponse);
+            handler.QueueResponse(MockResponseMessages.PostTransactionResponse);
             var saveTransaction = new SaveTransaction
             {
                 Account_id = Guid.Empty,
@@ -63,7 +61,7 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void PostTransactionDoubleImportID()
         {
-            handler.QueueResponse(MockResponseHandlers.ImportIDExists);
+            handler.QueueResponse(MockResponseMessages.ImportIDExists);
             var saveTransaction = new SaveTransaction
             {
                 Account_id = Guid.Empty,

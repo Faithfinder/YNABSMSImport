@@ -1,11 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using YNABConnector;
 using YNABConnector.YNABObjectModel;
-using YNABConnector.Exceptions;
-using System;
 
 namespace NUnit.YnabConnectorTests
 {
@@ -33,6 +29,7 @@ namespace NUnit.YnabConnectorTests
 
         [Test]
         [Category("Real")]
+        [Explicit]
         public void PostTransactionTest()
         {
             var budgets = ynabClient.GetBudgetsAsync().Result;

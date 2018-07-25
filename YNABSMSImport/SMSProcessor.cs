@@ -37,7 +37,8 @@ namespace YNABSMSImport
                 ynabClient.RefreshAccessToken(ApiKeys.AccessToken);
                 try
                 {
-                    ynabClient.PostTransactionAsync(GetBudgetSummary(), SaveTransaction(data["Amount"], data["Payee"]));
+                    ynabClient.PostTransactionAsync(GetBudgetSummary(),
+                        SaveTransaction(data.GetValueOrDefault("Amount", "0"), data.GetValueOrDefault("Payee", "Test")));
                 }
                 catch
                 {

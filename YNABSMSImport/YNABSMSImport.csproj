@@ -58,6 +58,12 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtractionKeys.cs" />
+    <Compile Include="ImportSettings\AddTransactionSMS.cs" />
+    <Compile Include="ImportSettings\IDataProviderSettings.cs" />
+    <Compile Include="ImportSettings\IgnoreSMS.cs" />
+    <Compile Include="ImportSettings\ISMSTemplate.cs" />
+    <Compile Include="ImportSettings\OtkritieBankSettings.cs" />
     <Compile Include="SMSDataExtractor.cs" />
     <Compile Include="SMSProcessor.cs" />
     <Compile Include="MainActivity.cs" />

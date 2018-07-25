@@ -12,19 +12,13 @@ namespace YNABSMSImport
         public static Dictionary<string, string> ExtractData(string Text)
         {
             var result = new Dictionary<string, string>();
-            var AmountPattern = "(?<=Платёж )(.*?)(?= р.)";
-            var AmountRegEx = new Regex(AmountPattern);
-            var matches = AmountRegEx.Matches(Text);
-            if (matches.Count > 0)
+            var Pattern = @"Платёж (?<amount>.*?) р. в (?<payee>.*?). Карта \*(?<card>.*?). Доступно (?<total>.*?) р.";
+            var RegEx = new Regex(Pattern);
+            var match = RegEx.Match(Text);
+            if (match.Success)
             {
-                result.Add("Amount", matches[0].Value);
-            }
-            var PayeePattern = "(?<= р. в )(.*?)(?=. Карта)";
-            var PayeeRegEx = new Regex(PayeePattern);
-            matches = PayeeRegEx.Matches(Text);
-            if (matches.Count > 0)
-            {
-                result.Add("Payee", matches[0].Value);
+                result.Add("Amount", match.Groups["amount"].Value);
+                result.Add("Payee", match.Groups["payee"].Value);
             }
             return result;
         }

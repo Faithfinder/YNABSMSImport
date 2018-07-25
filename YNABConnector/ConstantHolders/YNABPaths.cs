@@ -2,8 +2,10 @@
 
 namespace YNABConnector
 {
-    internal static class YNABPaths
+    public static class YNABPaths
     {
+        public const string AuthCodeGrantFlow = "https://app.youneedabudget.com/oauth/token";
+        public const string Authorization = "https://app.youneedabudget.com/oauth/authorize";
         internal const string Base = "https://api.youneedabudget.com/";
         internal const string Budgets = "v1/budgets";
 

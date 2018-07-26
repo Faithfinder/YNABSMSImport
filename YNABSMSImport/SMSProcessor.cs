@@ -23,8 +23,7 @@ namespace YNABSMSImport
 
         protected override void OnHandleIntent(Intent intent)
         {
-            var address = intent.GetStringExtra("Address");
-            var message = intent.GetStringExtra("Message");
+            (string address, string message) = ExtractSMSDataFromIntent(intent);
 
             var DisplayText = $"From: {address}, Text: {message}";
 
@@ -45,6 +44,9 @@ namespace YNABSMSImport
                     NotifyUser("Some error");
                 }
             }
+        private static (string address, string message) ExtractSMSDataFromIntent(Intent intent)
+        {
+            return (intent.GetStringExtra("Address"), intent.GetStringExtra("Message"));
         }
 
         private BudgetSummary GetBudgetSummary()

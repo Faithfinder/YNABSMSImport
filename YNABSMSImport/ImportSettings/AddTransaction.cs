@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -12,10 +11,12 @@ using Android.Widget;
 
 namespace YNABSMSImport.ImportSettings
 {
-    internal class AddTransactionSMS : ISMSTemplate
+    internal class AddTransaction : SMSTemplate
     {
         public Guid AccountID { get; set; }
+
         public Guid BudgetID { get; set; }
-        public string RegExPattern { get; set; }
+
+        public AddTransaction() => behaviour = new AddTransactionBehaviour();
     }
 }

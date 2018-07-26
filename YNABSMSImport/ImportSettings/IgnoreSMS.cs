@@ -12,8 +12,8 @@ using Android.Widget;
 
 namespace YNABSMSImport.ImportSettings
 {
-    internal class IgnoreSMS : ISMSTemplate
+    internal class IgnoreSMS : SMSTemplate
     {
-        public string RegExPattern { get; set; }
+        public IgnoreSMS() => behaviour = new IgnoreSMSBehaviour();
     }
 }

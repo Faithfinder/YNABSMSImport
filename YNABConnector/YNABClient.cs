@@ -51,8 +51,13 @@ namespace YNABConnector
 
         public async Task<TransactionDetail> PostTransactionAsync(BudgetSummary budgetSummary, SaveTransaction saveTransaction)
         {
+            return await PostTransactionAsync(budgetSummary.Id, saveTransaction);
+        }
+
+        public async Task<TransactionDetail> PostTransactionAsync(Guid budgetId, SaveTransaction saveTransaction)
+        {
             var postJson = saveTransaction.Wrap().Serialize();
-            var responseJson = await PostJSON(YNABPaths.Transactions(budgetSummary.Id), ConstructHttpContent(postJson));
+            var responseJson = await PostJSON(YNABPaths.Transactions(budgetId), ConstructHttpContent(postJson));
             return ExtractTransaction(responseJson);
         }
 
@@ -61,6 +66,7 @@ namespace YNABConnector
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
+        private static MediaTypeWithQualityHeaderValue JsonTypeHeader => new MediaTypeWithQualityHeaderValue(JSON_CONTENT_TYPE);
         private const string JSON_CONTENT_TYPE = "application/json";
 
         private static YNABClient instance;
@@ -77,19 +83,14 @@ namespace YNABConnector
                 BaseAddress = new Uri(YNABPaths.Base)
             };
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader());
+            client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader);
         }
 
         private static StringContent ConstructHttpContent(string Json)
         {
             var content = new StringContent(Json);
-            content.Headers.ContentType = JsonTypeHeader();
+            content.Headers.ContentType = JsonTypeHeader;
             return content;
-        }
-
-        private static MediaTypeWithQualityHeaderValue JsonTypeHeader()
-        {
-            return new MediaTypeWithQualityHeaderValue(JSON_CONTENT_TYPE);
         }
 
         private Exception DeserializeToException(string json)

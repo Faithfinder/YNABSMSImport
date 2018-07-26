@@ -17,8 +17,8 @@ namespace YNABSMSImport.ImportSettings
         Guid Id { get; set; }
         string Name { get; set; }
         string Sender { get; set; }
-        List<ISMSTemplate> Templates { get; set; }
+        List<SMSTemplate> Templates { get; set; }
 
-        void ProcessSMS(string messageText);
+        SMSTemplate ChooseTemplate(string messageText);
     }
 }

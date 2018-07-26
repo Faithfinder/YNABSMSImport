@@ -27,7 +27,7 @@ namespace YNABSMSImport
             }
         }
 
-        private static (string address, string message) ExtractSMSDataFromIntent(Intent intent)
+        private (string address, string message) ExtractSMSDataFromIntent(Intent intent)
         {
             return (intent.GetStringExtra("Address"), intent.GetStringExtra("Message"));
         }

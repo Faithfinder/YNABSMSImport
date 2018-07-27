@@ -3385,7 +3385,7 @@ namespace YNABSMSImport
 			public const int appbar_scrolling_view_behavior = 2131165216;
 			
 			// aapt resource value: 0x7f07002d
-			public const int bank_oktritie_name = 2131165229;
+			public const int authorize_btn = 2131165229;
 			
 			// aapt resource value: 0x7f070021
 			public const int bottom_sheet_behavior = 2131165217;

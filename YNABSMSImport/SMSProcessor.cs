@@ -19,9 +19,9 @@ namespace YNABSMSImport
 
             var DisplayText = $"From: {address}, Text: {message}";
             NotifyUser(DisplayText);
-            if (address == "OTKRITIE" || address == "InternetSMS")
+            var setting = SettingsManager.FindSettingAsync(address).Result;
+            if (setting != null)
             {
-                IDataProviderSettings setting = UserSettings.TemporaryOtkritie(); //TODO SettingsManager.GetSetting(address);
                 var template = setting.ChooseTemplate(message);
                 template.ProcessMessage(message);
             }

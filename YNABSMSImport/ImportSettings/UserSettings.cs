@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace YNABSMSImport.ImportSettings
 {
-    internal class UserSettings : IDataProviderSettings
+    internal class UserSetting
     {
         public Guid Id { get; set; }
 
@@ -13,15 +13,17 @@ namespace YNABSMSImport.ImportSettings
 
         public List<SMSTemplate> Templates { get; set; }
 
-        public UserSettings()
+        public UserSetting()
         {
+            Id = Guid.NewGuid();
             Templates = new List<SMSTemplate>();
         }
 
-        public static UserSettings TemporaryOtkritie()
+        public static UserSetting TemporaryOtkritie()
         {
-            return new UserSettings
+            return new UserSetting
             {
+                Id = Guid.Parse("5C39B3AA-C7EF-42E4-8AAE-B5CA9B43160D"),
                 Sender = "OTKRITIE",
                 Templates = new List<SMSTemplate> {
                     new AddTransaction

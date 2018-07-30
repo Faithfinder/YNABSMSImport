@@ -1,15 +1,14 @@
-﻿using Android.App;
-using Android.Widget;
+﻿using Android;
+using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Content;
-using Android;
-using Android.Content.PM;
-using Xamarin.Auth;
+using Android.Widget;
 using System;
-using YNABConnector;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.Auth;
+using YNABConnector;
 
 namespace YNABSMSImport
 {
@@ -22,6 +21,7 @@ namespace YNABSMSImport
 
             SetContentView(Resource.Layout.activity_main);
             AcquirePermissions();
+            ImportSettings.SettingsManager.SaveSetting(ImportSettings.UserSetting.TemporaryOtkritie());
 
             var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
             btnAuthorize.Click += BtnAuthorize_Click;

@@ -42,7 +42,7 @@ namespace YNABSMSImport.ImportSettings
             return new SaveTransaction
             {
                 Account_id = accountID,
-                Amount = (int)(float.Parse(amount) * -1000),
+                Amount = -1 * amount.FloatParseAdvanced().ToMilliunits(),
                 Payee_name = payee
             };
         }

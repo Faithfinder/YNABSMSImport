@@ -28,21 +28,28 @@ namespace YNABSMSImport.ImportSettings
         public static void SaveSetting(UserSetting setting)
         {
             var filePath = Path.Combine(SettingsFolder, $"{setting.Id}.json");
-            var serialized = JsonConvert.SerializeObject(setting);
+            Directory.CreateDirectory(SettingsFolder);
             using (var writer = File.CreateText(filePath))
             {
+                var serialized = JsonConvert.SerializeObject(setting, SerializerSettings);
                 var writingTask = writer.WriteAsync(serialized);
             }
         }
 
-        private static string SettingsFolder => GetFolderPath(SpecialFolder.LocalApplicationData) + "/UserSettings";
+        private static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
+        private static string SettingsFolder => GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.Create) + "/UserSettings";
 
         private static async Task<IEnumerable<UserSetting>> QueryForSettingsAsync(string sender, DirectoryInfo directory)
         {
             return await Task.Run(() =>
 
             from file in directory.GetFiles()
-            let deserialized = JsonConvert.DeserializeObject<UserSetting>(file.FullName)
+            let value = file.OpenText().ReadToEnd()
+            let deserialized = JsonConvert.DeserializeObject<UserSetting>(value, SerializerSettings)
             where deserialized.Sender == sender
             select deserialized
             );

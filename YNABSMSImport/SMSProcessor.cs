@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Widget;
+using System;
 using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
@@ -19,11 +20,18 @@ namespace YNABSMSImport
 
             var DisplayText = $"From: {address}, Text: {message}";
             NotifyUser(DisplayText);
-            var setting = SettingsManager.FindSettingAsync(address).Result;
-            if (setting != null)
+            try
             {
-                var template = setting.ChooseTemplate(message);
-                template.ProcessMessage(message);
+                var setting = SettingsManager.FindSettingAsync(address).Result;
+                if (setting != null)
+                {
+                    var template = setting.ChooseTemplate(message);
+                    template.ProcessMessage(message);
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
             }
         }
 

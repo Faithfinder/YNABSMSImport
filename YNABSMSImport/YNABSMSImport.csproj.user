@@ -3,7 +3,7 @@
   <PropertyGroup>
     <SelectedDevice>Xiaomi MI MAX</SelectedDevice>
     <AndroidDesignerPreferredDevice>Nexus 4</AndroidDesignerPreferredDevice>
-    <AndroidDesignerPreferredTheme>Theme.AppCompat.Light.DarkActionBar</AndroidDesignerPreferredTheme>
+    <AndroidDesignerPreferredTheme>Theme.DeviceDefault</AndroidDesignerPreferredTheme>
     <DefaultDevice>somedevice</DefaultDevice>
   </PropertyGroup>
 </Project>

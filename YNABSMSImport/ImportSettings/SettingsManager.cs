@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Newtonsoft.Json;
 using static System.Environment;
 
@@ -36,12 +29,29 @@ namespace YNABSMSImport.ImportSettings
             }
         }
 
+        internal static async Task<IEnumerable<UserSetting>> GetAllAsync()
+        {
+            var directory = new DirectoryInfo(SettingsFolder);
+            return await QueryAllSettingsAsync(directory);
+        }
+
         private static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings()
         {
             TypeNameHandling = TypeNameHandling.Auto
         };
 
         private static string SettingsFolder => GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.Create) + "/UserSettings";
+
+        private static async Task<IEnumerable<UserSetting>> QueryAllSettingsAsync(DirectoryInfo directory)
+        {
+            var settingStrings = new List<string>();
+            foreach (var file in directory.GetFiles())
+            {
+                settingStrings.Add(await file.OpenText().ReadToEndAsync());
+            }
+            return from settingString in settingStrings
+                   select JsonConvert.DeserializeObject<UserSetting>(settingString, SerializerSettings);
+        }
 
         private static async Task<IEnumerable<UserSetting>> QueryForSettingsAsync(string sender, DirectoryInfo directory)
         {

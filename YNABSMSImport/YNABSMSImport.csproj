@@ -67,6 +67,7 @@
     <Compile Include="ImportSettings\SettingsManager.cs" />
     <Compile Include="ImportSettings\SMSTemplate.cs" />
     <Compile Include="ImportSettings\UserSettings.cs" />
+    <Compile Include="ManageSettingsActivity.cs" />
     <Compile Include="MilliunitExtensions.cs" />
     <Compile Include="SMSProcessor.cs" />
     <Compile Include="MainActivity.cs" />
@@ -129,6 +130,11 @@
       <Project>{0d0dd2aa-509e-4eec-b436-54ddb993efe2}</Project>
       <Name>YNABConnector</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\manage_settings.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

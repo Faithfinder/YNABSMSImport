@@ -2,4 +2,6 @@
   <string name="app_name">YNABSMSImport</string>
   <string name="action_settings">Settings</string>
   <string name="authorize_btn">Authorize</string>
+  <string name="manage_settings_title">Import settings</string>
+  <string name="manage_settings_btn">Manage settings</string>
 </resources>

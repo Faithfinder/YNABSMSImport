@@ -1,5 +1,6 @@
 ﻿using Android;
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
@@ -25,6 +26,9 @@ namespace YNABSMSImport
 
             var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
             btnAuthorize.Click += BtnAuthorize_Click;
+
+            var btnManageSettings = FindViewById<Button>(Resource.Id.btnManageSettings);
+            btnManageSettings.Click += BtnManageSettings_Click;
         }
 
         private static OAuth2Authenticator GetConfiguredAuthenticator()
@@ -66,6 +70,12 @@ namespace YNABSMSImport
             {
                 Toast.MakeText(this, "Already authenticated!", ToastLength.Long).Show();
             }
+        }
+
+        private void BtnManageSettings_Click(object sender, EventArgs e)
+        {
+            var intent = new Intent(this, typeof(ManageSettingsActivity));
+            StartActivity(intent);
         }
 
         private YNABConnectionData ExtractConnectionData(IEnumerable<Account> accounts)

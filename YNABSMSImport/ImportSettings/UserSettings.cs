@@ -16,6 +16,7 @@ namespace YNABSMSImport.ImportSettings
         public UserSetting()
         {
             Id = Guid.NewGuid();
+            Name = "";
             Templates = new List<SMSTemplate>();
         }
 
@@ -24,6 +25,7 @@ namespace YNABSMSImport.ImportSettings
             return new UserSetting
             {
                 Id = Guid.Parse("5C39B3AA-C7EF-42E4-8AAE-B5CA9B43160D"),
+                Name = "Банк открытие",
                 Sender = "OTKRITIE",
                 Templates = new List<SMSTemplate> {
                     new AddTransaction

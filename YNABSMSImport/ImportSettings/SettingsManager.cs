@@ -19,7 +19,7 @@ namespace YNABSMSImport.ImportSettings
 
         public static async Task<UserSetting> FindSettingAsync(string sender)
         {
-            var query = await QueryForSettingsAsync(sender);
+            var query = await QueryForSettings(sender);
 
             return query.FirstOrDefault();
         }

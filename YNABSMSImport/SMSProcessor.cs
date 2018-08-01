@@ -14,24 +14,17 @@ namespace YNABSMSImport
         {
         }
 
-        protected override void OnHandleIntent(Intent intent)
+        protected override async void OnHandleIntent(Intent intent)
         {
             (string address, string message) = ExtractSMSDataFromIntent(intent);
 
             var DisplayText = $"From: {address}, Text: {message}";
             NotifyUser(DisplayText);
-            try
+            var setting = await SettingsManager.FindSettingAsync(address);
+            if (setting != null)
             {
-                var setting = SettingsManager.FindSettingAsync(address).Result;
-                if (setting != null)
-                {
-                    var template = setting.ChooseTemplate(message);
-                    template.ProcessMessage(message);
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
+                var template = setting.ChooseTemplate(message);
+                template.ProcessMessage(message);
             }
         }
 

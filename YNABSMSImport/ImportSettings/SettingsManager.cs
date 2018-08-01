@@ -10,18 +10,24 @@ namespace YNABSMSImport.ImportSettings
 {
     internal static class SettingsManager
     {
+        static SettingsManager()
+        {
+            SerializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+            SettingsFolderPath = GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.Create) + "/UserSettings";
+            SettingsFolder = new DirectoryInfo(SettingsFolderPath);
+        }
+
         public static async Task<UserSetting> FindSettingAsync(string sender)
         {
-            var directory = new DirectoryInfo(SettingsFolder);
-            IEnumerable<UserSetting> query = await QueryForSettingsAsync(sender, directory);
+            var query = await QueryForSettingsAsync(sender);
 
             return query.FirstOrDefault();
         }
 
         public static void SaveSetting(UserSetting setting)
         {
-            var filePath = Path.Combine(SettingsFolder, $"{setting.Id}.json");
-            Directory.CreateDirectory(SettingsFolder);
+            var filePath = Path.Combine(SettingsFolderPath, $"{setting.Id}.json");
+            Directory.CreateDirectory(SettingsFolderPath);
             using (var writer = File.CreateText(filePath))
             {
                 var serialized = JsonConvert.SerializeObject(setting, SerializerSettings);
@@ -31,33 +37,29 @@ namespace YNABSMSImport.ImportSettings
 
         internal static async Task<IEnumerable<UserSetting>> GetAllAsync()
         {
-            var directory = new DirectoryInfo(SettingsFolder);
-            return await QueryAllSettingsAsync(directory);
+            return await QueryAllSettingsAsync();
         }
 
-        private static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings()
-        {
-            TypeNameHandling = TypeNameHandling.Auto
-        };
+        private static readonly JsonSerializerSettings SerializerSettings;
+        private static readonly DirectoryInfo SettingsFolder;
+        private static readonly string SettingsFolderPath;
 
-        private static string SettingsFolder => GetFolderPath(SpecialFolder.LocalApplicationData, SpecialFolderOption.Create) + "/UserSettings";
-
-        private static async Task<IEnumerable<UserSetting>> QueryAllSettingsAsync(DirectoryInfo directory)
+        private static async Task<IEnumerable<UserSetting>> QueryAllSettingsAsync()
         {
-            var settingStrings = new List<string>();
-            foreach (var file in directory.GetFiles())
-            {
-                settingStrings.Add(await file.OpenText().ReadToEndAsync());
-            }
-            return from settingString in settingStrings
-                   select JsonConvert.DeserializeObject<UserSetting>(settingString, SerializerSettings);
+            var tasks = from file in SettingsFolder.GetFiles()
+                        select file.OpenText().ReadToEndAsync();
+
+            var result = from json in await Task.WhenAll(tasks)
+                         select JsonConvert.DeserializeObject<UserSetting>(json, SerializerSettings);
+
+            return result;
         }
 
-        private static async Task<IEnumerable<UserSetting>> QueryForSettingsAsync(string sender, DirectoryInfo directory)
+        private static Task<IEnumerable<UserSetting>> QueryForSettings(string sender)
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
 
-            from file in directory.GetFiles()
+            from file in SettingsFolder.GetFiles()
             let value = file.OpenText().ReadToEnd()
             let deserialized = JsonConvert.DeserializeObject<UserSetting>(value, SerializerSettings)
             where deserialized.Sender == sender

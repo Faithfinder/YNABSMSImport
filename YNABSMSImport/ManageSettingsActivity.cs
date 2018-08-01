@@ -16,12 +16,12 @@ namespace YNABSMSImport
     [Activity(Label = "@string/manage_settings_title", Theme = "@style/AppTheme")]
     public class ManageSettingsActivity : ListActivity
     {
-        protected override void OnCreate(Bundle bundle)
+        protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             // Create your application here
             var settingsEnum = SettingsManager.GetAllAsync();
-            var taskresult = settingsEnum.Result;
+            var taskresult = await settingsEnum;
             var settings = taskresult.Select(p => p.Name).ToArray();
             ListAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, settings);
         }

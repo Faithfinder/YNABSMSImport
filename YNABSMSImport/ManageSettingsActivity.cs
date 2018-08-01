@@ -10,11 +10,12 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using YNABSMSImport.ImportSettings;
+using Android.Support.V7.App;
 
 namespace YNABSMSImport
 {
     [Activity(Label = "@string/manage_settings_title", Theme = "@style/AppTheme")]
-    public class ManageSettingsActivity : Activity
+    public class ManageSettingsActivity : AppCompatActivity
     {
         protected override async void OnCreate(Bundle bundle)
         {

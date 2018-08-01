@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    android:baselineAligned="true"
     android:orientation="vertical">
     <Button
         android:text="@string/authorize_btn"

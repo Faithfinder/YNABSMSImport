@@ -66,7 +66,7 @@
     <Compile Include="ImportSettings\ITemplateBehaviour.cs" />
     <Compile Include="ImportSettings\SettingsManager.cs" />
     <Compile Include="ImportSettings\SMSTemplate.cs" />
-    <Compile Include="ImportSettings\UserSettings.cs" />
+    <Compile Include="ImportSettings\UserSetting.cs" />
     <Compile Include="ManageSettingsActivity.cs" />
     <Compile Include="MilliunitExtensions.cs" />
     <Compile Include="SMSProcessor.cs" />
@@ -134,6 +134,7 @@
   <ItemGroup>
     <AndroidResource Include="Resources\layout\manage_settings.axml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

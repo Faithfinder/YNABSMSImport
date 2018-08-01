@@ -49,5 +49,7 @@ namespace YNABSMSImport.ImportSettings
             }
             return new IgnoreSMS();
         }
+
+        public override string ToString() => Name;
     }
 }

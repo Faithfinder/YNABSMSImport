@@ -9,7 +9,7 @@ public sealed class ExtractionKeys
     public static readonly ExtractionKeys Payee = new ExtractionKeys(1, "Payee", "(?<payee>.*?)");
     public static readonly ExtractionKeys RandomText = new ExtractionKeys(2, "RandomText", "(.*?)");
 
-    public readonly string regExPattern;
+    public readonly string RegExPattern;
 
     public static List<ExtractionKeys> GetAll()
     {
@@ -24,16 +24,16 @@ public sealed class ExtractionKeys
 
     public override string ToString()
     {
-        return name;
+        return _name;
     }
 
-    private readonly string name;
-    private readonly int value;
+    private readonly string _name;
+    private readonly int _value;
 
     private ExtractionKeys(int value, string name, string regExPattern)
     {
-        this.name = name;
-        this.value = value;
-        this.regExPattern = regExPattern;
+        _name = name;
+        _value = value;
+        RegExPattern = regExPattern;
     }
 }

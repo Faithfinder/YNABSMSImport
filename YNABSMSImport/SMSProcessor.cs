@@ -16,37 +16,37 @@ namespace YNABSMSImport
 
         protected override async void OnHandleIntent(Intent intent)
         {
-            (string address, string message) = ExtractSMSDataFromIntent(intent);
+            var (address, message) = ExtractSMSDataFromIntent(intent);
 
-            var DisplayText = $"From: {address}, Text: {message}";
-            NotifyUser(DisplayText);
+            var displayText = $"From: {address}, Text: {message}";
+            NotifyUser(displayText);
             var setting = await SettingsManager.FindSettingAsync(address);
-            if (setting != null)
-            {
-                var template = setting.ChooseTemplate(message);
-                template.ProcessMessage(message);
-            }
+
+            if (setting == null) return;
+
+            var template = setting.ChooseTemplate(message);
+            template.ProcessMessage(message);
         }
 
-        private (string address, string message) ExtractSMSDataFromIntent(Intent intent)
+        private static (string address, string message) ExtractSMSDataFromIntent(Intent intent)
         {
             return (intent.GetStringExtra("Address"), intent.GetStringExtra("Message"));
         }
 
-        private void NotifyUser(string DisplayText)
+        private static void NotifyUser(string displayText)
         {
             var handler = new Handler(Looper.MainLooper);
             handler.Post(() =>
             {
-                Toast.MakeText(Application.Context, DisplayText, ToastLength.Long).Show();
+                Toast.MakeText(Application.Context, displayText, ToastLength.Long).Show();
 
                 var notification = new Notification.Builder(Application.Context)
                     .SetContentTitle("YNABImport")
-                    .SetContentText(DisplayText)
+                    .SetContentText(displayText)
                     .SetSmallIcon(Resource.Drawable.ic_stat_beach_access).Build();
 
                 var notificationManager = Application.Context.GetSystemService(NotificationService) as NotificationManager;
-                notificationManager.Notify(0, notification);
+                notificationManager?.Notify(0, notification);
             });
         }
     }

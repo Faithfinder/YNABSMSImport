@@ -1,7 +1,9 @@
-﻿namespace YNABSMSImport.ImportSettings
+﻿using System.Threading.Tasks;
+
+namespace YNABSMSImport.ImportSettings
 {
     internal interface ITemplateBehaviour
     {
-        void ProcessMessage(string message, SMSTemplate template);
+        Task ProcessMessage(string message, SMSTemplate template);
     }
 }

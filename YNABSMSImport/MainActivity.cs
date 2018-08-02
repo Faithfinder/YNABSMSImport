@@ -50,8 +50,8 @@ namespace YNABSMSImport
                 ApiKeys.ClientID,
                 ApiKeys.ClientSecret,
                 "",
-                new Uri(YNABPaths.Authorization),
-                accessTokenUrl: new Uri(YNABPaths.AuthCodeGrantFlow),
+                new Uri(YNABPaths.AUTHORIZATION),
+                accessTokenUrl: new Uri(YNABPaths.AUTH_CODE_GRANT_FLOW),
                 redirectUrl: new Uri("https://localhost")
             );
         }

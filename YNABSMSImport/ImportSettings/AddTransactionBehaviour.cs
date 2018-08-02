@@ -1,43 +1,22 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using YNABConnector.YNABObjectModel;
+using System.Threading.Tasks;
+
 using YNABConnector;
+using YNABConnector.YNABObjectModel;
 
 namespace YNABSMSImport.ImportSettings
 {
     internal class AddTransactionBehaviour : ITemplateBehaviour
     {
-        public void ProcessMessage(string message, SMSTemplate template)
+        private static (string Amount, string Payee) ExtractData(string message, SMSTemplate processingTemplate)
         {
-            if (template is AddTransaction processingTemplate)
-            {
-                var (Amount, Payee) = ExtractData(message, processingTemplate);
-                var transaction = SaveTransaction(Amount, Payee, processingTemplate.AccountID);
-                var client = YNABClient.GetInstance();
-                client.RefreshAccessToken(ApiKeys.AccessToken);
-                var postTask = client.PostTransactionAsync(processingTemplate.BudgetID, transaction);
-            }
-            else
-            {
-                throw new ArgumentException("Wrong behaviour for template!");
-            }
+            var regEx = new Regex(processingTemplate.UserToRegEx());
+            var match = regEx.Match(message);
+            return match.Success ? (match.Groups["amount"].Value, match.Groups["payee"].Value) : ("0", "");
         }
 
-        private static (string Amount, string Payee) ExtractData(string message, AddTransaction processingTemplate)
-        {
-            var RegEx = new Regex(processingTemplate.UserToRegEx());
-            var match = RegEx.Match(message);
-            if (match.Success)
-            {
-                return (match.Groups["amount"].Value, match.Groups["payee"].Value);
-            }
-            else
-            {
-                return ("0", "");
-            }
-        }
-
-        private SaveTransaction SaveTransaction(string amount, string payee, Guid accountID)
+        private static SaveTransaction SaveTransaction(string amount, string payee, Guid accountID)
         {
             return new SaveTransaction
             {
@@ -45,6 +24,22 @@ namespace YNABSMSImport.ImportSettings
                 Amount = -1 * amount.FloatParseAdvanced().ToMilliunits(),
                 Payee_name = payee
             };
+        }
+
+        public async Task ProcessMessage(string message, SMSTemplate template)
+        {
+            if (template is AddTransaction processingTemplate)
+            {
+                var (amount, payee) = ExtractData(message, processingTemplate);
+                var transaction = SaveTransaction(amount, payee, processingTemplate.AccountID);
+                var client = YNABClient.GetInstance();
+                client.RefreshAccessToken(ApiKeys.AccessToken);
+                await client.PostTransactionAsync(processingTemplate.BudgetID, transaction);
+            }
+            else
+            {
+                throw new ArgumentException("Wrong behaviour for template!");
+            }
         }
     }
 }

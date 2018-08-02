@@ -11,28 +11,23 @@ namespace YNABConnector
 {
     public class YNABClient
     {
-        public bool Initialized => !(instance is null);
+        public bool Initialized => !(_instance is null);
 
         /// <summary>
         /// Get the singleton instance of YNABClient. If it's not initialized, supply constructor with handler.
         /// </summary>
-        /// <param name="_handler">Ignored if the instance is already initialized</param>
+        /// <param name="handler">Ignored if the instance is already initialized</param>
         /// <returns></returns>
-        public static YNABClient GetInstance(HttpMessageHandler _handler)
+        public static YNABClient GetInstance(HttpMessageHandler handler)
         {
-            if (instance is null)
-            {
-                instance = new YNABClient(_handler);
-            }
-
-            return instance;
+            return _instance ?? (_instance = new YNABClient(handler));
         }
 
         public static YNABClient GetInstance() => GetInstance(new HttpClientHandler());
 
         public static void ResetInstance()
         {
-            instance = null;
+            _instance = null;
         }
 
         public async Task<List<Account>> GetAccountsAsync(BudgetSummary budgetSummary)
@@ -44,7 +39,7 @@ namespace YNABConnector
 
         public async Task<List<BudgetSummary>> GetBudgetsAsync()
         {
-            var json = await GetJSON(YNABPaths.Budgets);
+            var json = await GetJSON(YNABPaths.BUDGETS);
 
             return ExtractBudgets(json);
         }
@@ -63,55 +58,52 @@ namespace YNABConnector
 
         public void RefreshAccessToken(string accessToken)
         {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         private static MediaTypeWithQualityHeaderValue JsonTypeHeader => new MediaTypeWithQualityHeaderValue(JSON_CONTENT_TYPE);
         private const string JSON_CONTENT_TYPE = "application/json";
 
-        private static YNABClient instance;
+        private static YNABClient _instance;
 
-        private HttpClient client;
+        private readonly HttpClient _client;
 
-        private HttpMessageHandler handler;
-
-        private YNABClient(HttpMessageHandler _handler)
+        private YNABClient(HttpMessageHandler handler)
         {
-            handler = _handler;
-            client = new HttpClient(_handler)
+            _client = new HttpClient(handler)
             {
-                BaseAddress = new Uri(YNABPaths.Base)
+                BaseAddress = new Uri(YNABPaths.BASE)
             };
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader);
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(JsonTypeHeader);
         }
 
-        private static StringContent ConstructHttpContent(string Json)
+        private static StringContent ConstructHttpContent(string json)
         {
-            var content = new StringContent(Json);
+            var content = new StringContent(json);
             content.Headers.ContentType = JsonTypeHeader;
             return content;
         }
 
-        private Exception DeserializeToException(string json)
+        private static Exception DeserializeToException(string json)
         {
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(json);
             return ExceptionFactory.GenerateExceptionFromErrorResponse(errorResponse);
         }
 
-        private List<Account> ExtractAccounts(string json)
+        private static List<Account> ExtractAccounts(string json)
         {
             var accountsResponse = JsonConvert.DeserializeObject<SuccessResponse<AccountsWrapper>>(json);
             return accountsResponse.data.accounts;
         }
 
-        private List<BudgetSummary> ExtractBudgets(string json)
+        private static List<BudgetSummary> ExtractBudgets(string json)
         {
             var budgetSummaryResponse = JsonConvert.DeserializeObject<SuccessResponse<BudgetSummaryWrapper>>(json);
             return budgetSummaryResponse.data.budgets;
         }
 
-        private TransactionDetail ExtractTransaction(string json)
+        private static TransactionDetail ExtractTransaction(string json)
         {
             var transactionResponse = JsonConvert.DeserializeObject<SuccessResponse<TransactionWrapper>>(json);
             return transactionResponse.data.Transaction;
@@ -119,11 +111,11 @@ namespace YNABConnector
 
         private async Task<string> GetJSON(string path)
         {
-            var response = await client.GetAsync(path);
+            var response = await _client.GetAsync(path);
             return await ParseResponse(response);
         }
 
-        private async Task<string> ParseResponse(HttpResponseMessage response)
+        private static async Task<string> ParseResponse(HttpResponseMessage response)
         {
             var json = await response.Content.ReadAsStringAsync();
 
@@ -135,7 +127,7 @@ namespace YNABConnector
 
         private async Task<string> PostJSON(string path, HttpContent content)
         {
-            var response = await client.PostAsync(path, content);
+            var response = await _client.PostAsync(path, content);
             return await ParseResponse(response);
         }
     }

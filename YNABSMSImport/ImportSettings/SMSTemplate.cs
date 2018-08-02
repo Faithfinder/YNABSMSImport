@@ -7,7 +7,7 @@ namespace YNABSMSImport.ImportSettings
     {
         public string UserTemplate { get; set; }
 
-        public bool isMatch(string message)
+        public bool IsMatch(string message)
         {
             var regEx = new Regex(UserToRegEx());
             return regEx.Match(message).Success;
@@ -19,14 +19,14 @@ namespace YNABSMSImport.ImportSettings
 
             foreach (var key in ExtractionKeys.GetAll())
             {
-                pattern = pattern.Replace($"\\[{key}]", key.regExPattern);
+                pattern = pattern.Replace($"\\[{key}]", key.RegExPattern);
             }
 
             return pattern;
         }
 
-        internal ITemplateBehaviour behaviour;
+        internal ITemplateBehaviour Behaviour;
 
-        internal void ProcessMessage(string message) => behaviour.ProcessMessage(message, this);
+        internal void ProcessMessage(string message) => Behaviour.ProcessMessage(message, this);
     }
 }

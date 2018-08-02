@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 
 namespace YNABSMSImport.ImportSettings
 {
@@ -17,6 +8,6 @@ namespace YNABSMSImport.ImportSettings
 
         public Guid BudgetID { get; set; }
 
-        public AddTransaction() => behaviour = new AddTransactionBehaviour();
+        public AddTransaction() => Behaviour = new AddTransactionBehaviour();
     }
 }

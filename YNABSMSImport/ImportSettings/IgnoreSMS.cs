@@ -14,6 +14,6 @@ namespace YNABSMSImport.ImportSettings
 {
     internal class IgnoreSMS : SMSTemplate
     {
-        public IgnoreSMS() => behaviour = new IgnoreSMSBehaviour();
+        public IgnoreSMS() => Behaviour = new IgnoreSMSBehaviour();
     }
 }

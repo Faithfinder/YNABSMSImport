@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using YNABSMSImport.ImportSettings;
 using Android.Support.V7.App;
+using Android.Widget;
+
+using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
 {
@@ -23,7 +21,8 @@ namespace YNABSMSImport
             SetContentView(Resource.Layout.manage_settings);
             var settingsList = FindViewById<ListView>(Resource.Id.lvSettingsList);
             var userSettings = await SettingsManager.GetAllAsync();
-            settingsList.Adapter = new ArrayAdapter<UserSetting>(this, Android.Resource.Layout.SimpleListItem1, userSettings.ToArray());
+            settingsList.Adapter =
+                new ArrayAdapter<UserSetting>(this, Android.Resource.Layout.SimpleListItem1, userSettings.ToArray());
         }
     }
 }

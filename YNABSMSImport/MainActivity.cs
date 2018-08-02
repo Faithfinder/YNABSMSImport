@@ -1,15 +1,20 @@
-﻿using Android;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using Xamarin.Auth;
+
 using YNABConnector;
+
+using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
 {
@@ -22,7 +27,7 @@ namespace YNABSMSImport
 
             SetContentView(Resource.Layout.activity_main);
             AcquirePermissions();
-            ImportSettings.SettingsManager.SaveSetting(ImportSettings.UserSetting.TemporaryOtkritie());
+            SettingsManager.SaveSetting(UserSetting.TemporaryOtkritie());
 
             var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
             btnAuthorize.Click += BtnAuthorize_Click;
@@ -31,34 +36,55 @@ namespace YNABSMSImport
             btnManageSettings.Click += BtnManageSettings_Click;
         }
 
+        private static YNABConnectionData ExtractConnectionData(Account[] accounts)
+        {
+            YNABConnectionData result = null;
+            if (accounts.Any()) result = new YNABConnectionData(accounts.First());
+            return result;
+        }
+
         private static OAuth2Authenticator GetConfiguredAuthenticator()
         {
             return new OAuth2Authenticator
-                            (
-                                clientId: ApiKeys.ClientID,
-                                clientSecret: ApiKeys.ClientSecret,
-                                scope: "",
-                                authorizeUrl: new Uri(YNABPaths.Authorization),
-                                accessTokenUrl: new Uri(YNABPaths.AuthCodeGrantFlow),
-                                redirectUrl: new Uri("https://localhost"),
-                                isUsingNativeUI: false
-                            );
+            (
+                ApiKeys.ClientID,
+                ApiKeys.ClientSecret,
+                "",
+                new Uri(YNABPaths.Authorization),
+                accessTokenUrl: new Uri(YNABPaths.AuthCodeGrantFlow),
+                redirectUrl: new Uri("https://localhost")
+            );
+        }
+
+        private static void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs eventArgs)
+        {
+            // UI presented, so it's up to us to dimiss it on Android
+            // dismiss Activity with WebView or CustomTabs
+            //Finish();
+
+            if (eventArgs.IsAuthenticated)
+            {
+                Console.WriteLine("Authenticated with Ynab");
+                AccountStore.Create("password").Save(eventArgs.Account, "Ynab");
+            }
+            else
+            {
+                Console.WriteLine("YNAB Authentication didn't pass");
+            }
         }
 
         private void AcquirePermissions()
         {
             if (CheckSelfPermission(Manifest.Permission.ReceiveSms) != Permission.Granted)
-            {
                 RequestPermissions(new[] { Manifest.Permission.ReceiveSms }, 0);
-            }
         }
 
         private void BtnAuthorize_Click(object sender, EventArgs e)
         {
-            var accounts = AccountStore.Create("password").FindAccountsForService("Ynab");
+            var accounts = AccountStore.Create("password").FindAccountsForService("Ynab").ToArray();
             var connectionData = ExtractConnectionData(accounts);
-            var authentication_active = !connectionData?.Expired ?? false;
-            if (!authentication_active)
+            var authenticationActive = !connectionData?.Expired ?? false;
+            if (!authenticationActive)
             {
                 var auth = GetConfiguredAuthenticator();
 
@@ -76,33 +102,6 @@ namespace YNABSMSImport
         {
             var intent = new Intent(this, typeof(ManageSettingsActivity));
             StartActivity(intent);
-        }
-
-        private YNABConnectionData ExtractConnectionData(IEnumerable<Account> accounts)
-        {
-            YNABConnectionData result = null;
-            if (accounts.Any())
-            {
-                result = new YNABConnectionData(accounts.First());
-            }
-            return result;
-        }
-
-        private void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs eventArgs)
-        {
-            // UI presented, so it's up to us to dimiss it on Android
-            // dismiss Activity with WebView or CustomTabs
-            //Finish();
-
-            if (eventArgs.IsAuthenticated)
-            {
-                Console.WriteLine("Authenticated with Ynab");
-                AccountStore.Create("password").Save(eventArgs.Account, "Ynab");
-            }
-            else
-            {
-                Console.WriteLine("YNAB Authentication didn't pass");
-            }
         }
     }
 }

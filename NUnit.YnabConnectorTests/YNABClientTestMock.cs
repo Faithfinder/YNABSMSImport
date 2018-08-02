@@ -1,30 +1,48 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using YNABConnector;
-using YNABConnector.YNABObjectModel;
-using YNABConnector.Exceptions;
+﻿using System.Collections.Generic;
 using System;
+
+using NUnit.Framework;
+
+using YNABConnector;
+using YNABConnector.Exceptions;
+using YNABConnector.YNABObjectModel;
 
 namespace NUnit.YnabConnectorTests
 {
     [TestFixture(TestOf = typeof(YNABClient))]
     public class YNABClientTestMock
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            _handler = new StubHandler();
+            _ynabClient = YNABClient.GetInstance(_handler);
+        }
+
+        [OneTimeTearDown]
+        public void Teardown()
+        {
+            YNABClient.ResetInstance();
+        }
+
+        private StubHandler _handler;
+        private YNABClient _ynabClient;
+
         [Test]
         [Category("Mocked")]
         public void ErrorUnauthorized()
         {
-            handler.QueueResponse(MockResponseMessages.Unauthorized);
-            Assert.ThrowsAsync<AuthorizationException>(async () => await ynabClient.GetBudgetsAsync());
+            _handler.QueueResponse(MockResponseMessages.Unauthorized);
+            Assert.ThrowsAsync<AuthorizationException>(async () => await _ynabClient.GetBudgetsAsync());
         }
 
         [Test]
         [Category("Mocked")]
         public void GetAccountsParsedCorrectly()
         {
-            handler.QueueResponse(MockResponseMessages.AccountsResponse);
-            var budgets = ynabClient.GetAccountsAsync(new BudgetSummary { Id = Guid.Empty }).Result;
-            Assert.That(budgets is List<Account>);
+            _handler.QueueResponse(MockResponseMessages.AccountsResponse);
+            var budgets = _ynabClient.GetAccountsAsync(new BudgetSummary {Id = Guid.Empty}).Result;
+            Assert.That(budgets != null);
             Assert.That(budgets.Count == 1);
             Assert.That(budgets[0].Id == Guid.Empty, "Incorect Id");
             Assert.That(budgets[0].Name == "TestAccount", "Incorrect account name");
@@ -34,9 +52,9 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void GetBudgetsParsedCorrectly()
         {
-            handler.QueueResponse(MockResponseMessages.BudgetsResponse);
-            var budgets = ynabClient.GetBudgetsAsync().Result;
-            Assert.That(budgets is List<BudgetSummary>);
+            _handler.QueueResponse(MockResponseMessages.BudgetsResponse);
+            var budgets = _ynabClient.GetBudgetsAsync().Result;
+            Assert.That(budgets != null);
             Assert.That(budgets.Count == 1);
             Assert.That(budgets[0].Id == Guid.Parse("00000000-0000-0000-0000-000000000000"));
             Assert.That(budgets[0].Name == "Test budget");
@@ -46,22 +64,23 @@ namespace NUnit.YnabConnectorTests
         [Category("Mocked")]
         public void PostTransaction()
         {
-            handler.QueueResponse(MockResponseMessages.PostTransactionResponse);
+            _handler.QueueResponse(MockResponseMessages.PostTransactionResponse);
             var saveTransaction = new SaveTransaction
             {
                 Account_id = Guid.Empty,
                 Amount = 100000,
                 Payee_name = "Test Payee"
             };
-            var transaction = ynabClient.PostTransactionAsync(new BudgetSummary { Id = Guid.Empty }, saveTransaction).Result;
-            Assert.That(transaction is TransactionDetail);
+            var transaction = _ynabClient.PostTransactionAsync(new BudgetSummary {Id = Guid.Empty}, saveTransaction)
+                .Result;
+            Assert.That(transaction != null);
         }
 
         [Test]
         [Category("Mocked")]
         public void PostTransactionDoubleImportID()
         {
-            handler.QueueResponse(MockResponseMessages.ImportIDExists);
+            _handler.QueueResponse(MockResponseMessages.ImportIDExists);
             var saveTransaction = new SaveTransaction
             {
                 Account_id = Guid.Empty,
@@ -69,23 +88,8 @@ namespace NUnit.YnabConnectorTests
                 Payee_name = "Test Payee",
                 Import_id = "double"
             };
-            Assert.ThrowsAsync<DuplicateImportIdException>(async () => await ynabClient.PostTransactionAsync(new BudgetSummary { Id = Guid.Empty }, saveTransaction));
+            Assert.ThrowsAsync<DuplicateImportIdException>(async () =>
+                await _ynabClient.PostTransactionAsync(new BudgetSummary {Id = Guid.Empty}, saveTransaction));
         }
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            handler = new StubHandler();
-            ynabClient = YNABClient.GetInstance(handler);
-        }
-
-        [OneTimeTearDown]
-        public void Teardown()
-        {
-            YNABClient.ResetInstance();
-        }
-
-        private StubHandler handler;
-        private YNABClient ynabClient;
     }
 }

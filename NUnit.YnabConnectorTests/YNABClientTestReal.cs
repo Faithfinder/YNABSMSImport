@@ -12,19 +12,19 @@ namespace NUnit.YnabConnectorTests
         [Category("Real")]
         public void GetAccountsTest()
         {
-            var budgets = ynabClient.GetBudgetsAsync().Result;
-            var accounts = ynabClient.GetAccountsAsync(budgets[0]).Result;
+            var budgets = _ynabClient.GetBudgetsAsync().Result;
+            var accounts = _ynabClient.GetAccountsAsync(budgets[0]).Result;
 
-            Assert.That(accounts is List<Account>);
+            Assert.That(accounts != null);
         }
 
         [Test]
         [Category("Real")]
         public void GetBudgetsTest()
         {
-            var budgets = ynabClient.GetBudgetsAsync().Result;
+            var budgets = _ynabClient.GetBudgetsAsync().Result;
 
-            Assert.That(budgets is List<BudgetSummary>);
+            Assert.That(budgets != null);
         }
 
         [Test]
@@ -32,23 +32,23 @@ namespace NUnit.YnabConnectorTests
         [Explicit]
         public void PostTransactionTest()
         {
-            var budgets = ynabClient.GetBudgetsAsync().Result;
-            var accounts = ynabClient.GetAccountsAsync(budgets[0]).Result;
+            var budgets = _ynabClient.GetBudgetsAsync().Result;
+            var accounts = _ynabClient.GetAccountsAsync(budgets[0]).Result;
             var saveTransaction = new SaveTransaction
             {
                 Account_id = accounts[0].Id,
                 Amount = 100000,
                 Payee_name = "Test Payee"
             };
-            var transaction = ynabClient.PostTransactionAsync(budgets[0], saveTransaction).Result;
-            Assert.That(transaction is TransactionDetail);
+            var transaction = _ynabClient.PostTransactionAsync(budgets[0], saveTransaction).Result;
+            Assert.That(transaction != null);
         }
 
         [OneTimeSetUp]
         public void Setup()
         {
-            ynabClient = YNABClient.GetInstance();
-            ynabClient.RefreshAccessToken(ApiKeys.AccessToken);
+            _ynabClient = YNABClient.GetInstance();
+            _ynabClient.RefreshAccessToken(ApiKeys.AccessToken);
         }
 
         [OneTimeTearDown]
@@ -57,6 +57,6 @@ namespace NUnit.YnabConnectorTests
             YNABClient.ResetInstance();
         }
 
-        private YNABClient ynabClient;
+        private YNABClient _ynabClient;
     }
 }

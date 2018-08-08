@@ -11,14 +11,11 @@ namespace YNABConnector.Exceptions
             var details = errorResponse.error;
             switch (details.id)
             {
-                case "400":
-                    if (details.detail.Contains("same import_id"))
-                        return new DuplicateImportIdException("It seems this transaction had already been posted");
-                    else
-                        goto default;
+                case "409":
+                    return new DuplicateImportIdException("It seems this transaction had already been posted");
 
                 case "401":
-                    return new AuthorizationException($"YNAB didn't authorize us. Is access token fine?");
+                    return new AuthorizationException("YNAB didn't authorize us. Is access token fine?");
 
                 default:
                     return new OtherYNABException(

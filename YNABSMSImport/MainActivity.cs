@@ -21,13 +21,13 @@ namespace YNABSMSImport
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_main);
             AcquirePermissions();
-            SettingsManager.SaveSetting(UserSetting.TemporaryOtkritie());
+            await new SettingsManager().SaveSettingAsync(UserSetting.TemporaryOtkritie());
 
             var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
             btnAuthorize.Click += BtnAuthorize_Click;

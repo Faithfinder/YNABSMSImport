@@ -40,7 +40,7 @@ namespace YNABSMSImport.ImportSettings
             return query.FirstOrDefault();
         }
 
-        public async Task SaveSetting(UserSetting setting)
+        public async Task SaveSettingAsync(UserSetting setting)
         {
             var filePath = _fileSystem.Path.Combine(SettingsFolderPath, $"{setting.Id}.json");
             _fileSystem.Directory.CreateDirectory(SettingsFolderPath);

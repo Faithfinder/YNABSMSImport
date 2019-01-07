@@ -20,7 +20,7 @@ namespace YNABSMSImport
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.manage_settings);
             var settingsList = FindViewById<ListView>(Resource.Id.lvSettingsList);
-            var userSettings = await SettingsManager.GetAllAsync();
+            var userSettings = await new SettingsManager().GetAllAsync();
             settingsList.Adapter =
                 new ArrayAdapter<UserSetting>(this, Android.Resource.Layout.SimpleListItem1, userSettings.ToArray());
         }

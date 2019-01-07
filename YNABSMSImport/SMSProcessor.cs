@@ -40,7 +40,7 @@ namespace YNABSMSImport
             {
                 Toast.MakeText(Application.Context, displayText, ToastLength.Long).Show();
 
-                var notification = new Notification.Builder(Application.Context)
+                var notification = new Notification.Builder(Application.Context, "Don't need now")
                     .SetContentTitle("YNABImport")
                     .SetContentText(displayText)
                     .SetSmallIcon(Resource.Drawable.ic_stat_beach_access).Build();

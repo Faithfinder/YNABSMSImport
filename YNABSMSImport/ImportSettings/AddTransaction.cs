@@ -8,6 +8,6 @@ namespace YNABSMSImport.ImportSettings
 
         public Guid BudgetID { get; set; }
 
-        public AddTransaction() => Behaviour = new AddTransactionBehaviour();
+        public AddTransaction() => Behaviour = new AddTransactionBehaviour(this);
     }
 }

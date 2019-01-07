@@ -9,9 +9,16 @@ namespace YNABSMSImport.ImportSettings
 {
     internal class AddTransactionBehaviour : ITemplateBehaviour
     {
-        private static (string Amount, string Payee) ExtractData(string message, SMSTemplate processingTemplate)
+        private readonly AddTransaction _parentTemplate;
+
+        public AddTransactionBehaviour(AddTransaction parentTemplate)
         {
-            var regEx = new Regex(processingTemplate.UserToRegEx());
+            _parentTemplate = parentTemplate;
+        }
+
+        private (string Amount, string Payee) ExtractData(string message)
+        {
+            var regEx = new Regex(_parentTemplate.UserToRegEx());
             var match = regEx.Match(message);
             return match.Success ? (match.Groups["amount"].Value, match.Groups["payee"].Value) : ("0", "");
         }
@@ -26,20 +33,14 @@ namespace YNABSMSImport.ImportSettings
             };
         }
 
-        public async Task ProcessMessage(string message, SMSTemplate template)
+        public async Task ProcessMessage(string message)
         {
-            if (template is AddTransaction processingTemplate)
-            {
-                var (amount, payee) = ExtractData(message, processingTemplate);
-                var transaction = SaveTransaction(amount, payee, processingTemplate.AccountID);
-                var client = YNABClient.GetInstance();
-                client.RefreshAccessToken(ApiKeys.AccessToken);
-                await client.PostTransactionAsync(processingTemplate.BudgetID, transaction);
-            }
-            else
-            {
-                throw new ArgumentException("Wrong behaviour for template!");
-            }
+
+            var (amount, payee) = ExtractData(message);
+            var transaction = SaveTransaction(amount, payee, _parentTemplate.AccountID);
+            var client = YNABClient.GetInstance();
+            client.RefreshAccessToken(ApiKeys.AccessToken);
+            await client.PostTransactionAsync(_parentTemplate.BudgetID, transaction);
         }
     }
 }

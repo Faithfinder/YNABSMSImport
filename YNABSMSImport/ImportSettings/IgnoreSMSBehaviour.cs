@@ -4,7 +4,7 @@ namespace YNABSMSImport.ImportSettings
 {
     internal class IgnoreSMSBehaviour : ITemplateBehaviour
     {
-        public Task ProcessMessage(string message, SMSTemplate template)
+        public Task ProcessMessage(string message)
         {
             //TODO Logging?
             return Task.CompletedTask;

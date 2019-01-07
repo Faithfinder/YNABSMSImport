@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace YNABSMSImport.ImportSettings
@@ -37,6 +37,12 @@ namespace YNABSMSImport.ImportSettings
                     }
                 }
             };
+        }
+
+        public void ProcessMessage(string messageText)
+        {
+            var template = ChooseTemplate(messageText);
+            template.ProcessMessage(messageText);
         }
 
         public SMSTemplate ChooseTemplate(string messageText)

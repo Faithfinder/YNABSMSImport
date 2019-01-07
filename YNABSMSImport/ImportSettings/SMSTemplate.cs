@@ -27,6 +27,6 @@ namespace YNABSMSImport.ImportSettings
 
         internal ITemplateBehaviour Behaviour;
 
-        internal void ProcessMessage(string message) => Behaviour.ProcessMessage(message, this);
+        internal void ProcessMessage(string message) => Behaviour.ProcessMessage(message);
     }
 }

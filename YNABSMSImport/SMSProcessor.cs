@@ -2,7 +2,6 @@
 using Android.Content;
 using Android.OS;
 using Android.Widget;
-using System;
 using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
@@ -22,10 +21,7 @@ namespace YNABSMSImport
             NotifyUser(displayText);
             var setting = await new SettingsManager().FindSettingAsync(address);
 
-            if (setting == null) return;
-
-            var template = setting.ChooseTemplate(message);
-            template.ProcessMessage(message);
+            setting?.ProcessMessage(message);
         }
 
         private static (string address, string message) ExtractSMSDataFromIntent(Intent intent)

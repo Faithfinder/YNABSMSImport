@@ -20,7 +20,7 @@ namespace YNABSMSImport
 
             var displayText = $"From: {address}, Text: {message}";
             NotifyUser(displayText);
-            var setting = await SettingsManager.FindSettingAsync(address);
+            var setting = await new SettingsManager().FindSettingAsync(address);
 
             if (setting == null) return;
 

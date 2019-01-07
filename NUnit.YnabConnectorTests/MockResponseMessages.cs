@@ -37,10 +37,10 @@ namespace NUnit.YnabConnectorTests
         {
             get
             {
-                var result = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                var result = new HttpResponseMessage(HttpStatusCode.Conflict)
                 {
                     Content = new StringContent(
-                        "{\"error\":{\"id\":\"400\",\"name\":\"bad_request\",\"detail\":\"{\\\"import_id\\\":[\\\"A transaction with the same import_id already exists on the account.\\\"]}\"}}")
+                        "{\"error\":{\"id\":\"409\",\"name\":\"bad_request\",\"detail\":\"{\\\"import_id\\\":[\\\"A transaction with the same import_id already exists on the account.\\\"]}\"}}")
                 };
 
                 return result;

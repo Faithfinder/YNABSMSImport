@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace YNABSMSImport.ImportSettings
@@ -8,6 +8,7 @@ namespace YNABSMSImport.ImportSettings
         public UserSetting()
         {
             Id = Guid.NewGuid();
+            Active = true;
             Name = "";
             Templates = new List<SMSTemplate>();
         }
@@ -18,6 +19,8 @@ namespace YNABSMSImport.ImportSettings
 
         public string Sender { get; set; }
 
+        public bool Active { get; set; }
+
         public List<SMSTemplate> Templates { get; set; }
 
         public static UserSetting TemporaryOtkritie()
@@ -27,6 +30,7 @@ namespace YNABSMSImport.ImportSettings
                 Id = Guid.Parse("5C39B3AA-C7EF-42E4-8AAE-B5CA9B43160D"),
                 Name = "Банк открытие",
                 Sender = "OTKRITIE",
+                Active = true,
                 Templates = new List<SMSTemplate>
                 {
                     new AddTransaction

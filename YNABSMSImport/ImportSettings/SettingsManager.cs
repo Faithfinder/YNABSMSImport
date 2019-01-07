@@ -62,7 +62,9 @@ namespace YNABSMSImport.ImportSettings
                         select file.OpenText().ReadToEndAsync();
 
             var result = from json in await Task.WhenAll(tasks)
-                         select JsonConvert.DeserializeObject<UserSetting>(json, _serializerSettings);
+                         let deserialized = TryDeserializeSetting(json)
+                         where deserialized.Active
+                         select deserialized;
 
             return result;
         }
@@ -74,7 +76,7 @@ namespace YNABSMSImport.ImportSettings
                 where file.Extension == ".json"
                 let value = file.OpenText().ReadToEnd()
                 let deserialized = TryDeserializeSetting(value)
-                where deserialized.Sender == sender
+                where deserialized.Active && deserialized.Sender == sender
                 select deserialized
             );
         }

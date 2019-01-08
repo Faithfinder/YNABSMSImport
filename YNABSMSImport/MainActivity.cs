@@ -1,33 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Android;
+﻿using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
-
+using System;
+using System.Linq;
 using Xamarin.Auth;
-
 using YNABConnector;
-
-using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        protected override async void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_main);
             AcquirePermissions();
-            await new SettingsManager().SaveSettingAsync(UserSetting.TemporaryOtkritie());
 
             var btnAuthorize = FindViewById<Button>(Resource.Id.btnAuthorize);
             btnAuthorize.Click += BtnAuthorize_Click;

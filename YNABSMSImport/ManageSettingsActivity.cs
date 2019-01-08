@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
@@ -20,6 +21,7 @@ namespace YNABSMSImport
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.manage_settings);
             SetUpListViewAsync();
+            SetUpFabAddSetting();
         }
 
         private async void SetUpListViewAsync()
@@ -39,6 +41,17 @@ namespace YNABSMSImport
             adapter.NotifyDataSetChanged();
         }
 
+        private void SetUpFabAddSetting()
+        {
+            var fabAddSetting = FindViewById<FloatingActionButton>(Resource.Id.fabAddSetting);
+            fabAddSetting.Click += async (sender, e) => { //TODO creation
+                var setting = UserSetting.TemporaryOtkritie();
+                await new SettingsManager().SaveSettingAsync(setting);
+                settings.Add(setting);
+                adapter.NotifyDataSetChanged();
+            };
+        }
+
         private void SetUpContextMenu(object sender, View.CreateContextMenuEventArgs e)
         {
             var menuInfo = e.MenuInfo as AdapterView.AdapterContextMenuInfo;
@@ -51,12 +64,12 @@ namespace YNABSMSImport
         private void SettingsList_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             var setting = settings[e.Position];
-            Toast.MakeText(Application.Context, setting.Name, ToastLength.Long).Show();
+            Toast.MakeText(Application.Context, setting.Name, ToastLength.Long).Show(); //TODO editing
         }
 
         public override bool OnContextItemSelected(IMenuItem item)
         {
-            var menuInfo = item.MenuInfo as AdapterView.AdapterContextMenuInfo;
+            var menuInfo = item.MenuInfo as AdapterView.AdapterContextMenuInfo; //TODO check which button pressed
             var setting = settings[menuInfo.Position];
             settings.RemoveAt(menuInfo.Position);
             new SettingsManager().DeleteSetting(setting);

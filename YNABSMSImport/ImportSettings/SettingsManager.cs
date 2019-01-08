@@ -51,6 +51,15 @@ namespace YNABSMSImport.ImportSettings
             }
         }
 
+        public void DeleteSetting(UserSetting setting)
+        {
+            var filePath = _fileSystem.Path.Combine(SettingsFolderPath, $"{setting.Id}.json");
+            if (_fileSystem.File.Exists(filePath))
+            {
+                _fileSystem.File.Delete(filePath);
+            }
+        }
+
         public async Task<IEnumerable<UserSetting>> GetAllAsync()
         {
             return await QueryAllSettingsAsync();

@@ -3432,6 +3432,12 @@ namespace YNABSMSImport
 			// aapt resource value: 0x7f070013
 			public const int search_menu_title = 2131165203;
 			
+			// aapt resource value: 0x7f070031
+			public const int settings_context_menu_delete = 2131165233;
+			
+			// aapt resource value: 0x7f070030
+			public const int settings_context_menu_edit = 2131165232;
+			
 			// aapt resource value: 0x7f070028
 			public const int status_bar_notification_info_overflow = 2131165224;
 			

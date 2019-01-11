@@ -29,6 +29,13 @@ namespace YNABSMSImport.ImportSettings
             SettingsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create) +
                                  "/UserSettings";
             _settingsFolder = _fileSystem.DirectoryInfo.FromDirectoryName(SettingsFolderPath);
+            EnsureSettingsDirExists();
+        }
+
+        private void EnsureSettingsDirExists()
+        {
+            if (!_fileSystem.Directory.Exists(SettingsFolderPath))
+                _fileSystem.Directory.CreateDirectory(SettingsFolderPath);
         }
 
         public string SettingsFolderPath { get; }
@@ -43,7 +50,7 @@ namespace YNABSMSImport.ImportSettings
         public async Task SaveSettingAsync(UserSetting setting)
         {
             var filePath = _fileSystem.Path.Combine(SettingsFolderPath, $"{setting.Id}.json");
-            _fileSystem.Directory.CreateDirectory(SettingsFolderPath);
+            
             using (var writer = _fileSystem.File.CreateText(filePath))
             {
                 var serialized = JsonConvert.SerializeObject(setting, _serializerSettings);

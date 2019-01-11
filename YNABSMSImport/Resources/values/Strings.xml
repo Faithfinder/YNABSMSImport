@@ -1,7 +1,15 @@
 <resources>
   <string name="app_name">YNABSMSImport</string>
+  
+  <!--Main screen-->
   <string name="action_settings">Settings</string>
   <string name="authorize_btn">Authorize</string>
+  
+  <!--Manage settings page-->
   <string name="manage_settings_title">Import settings</string>
   <string name="manage_settings_btn">Manage settings</string>
+  
+  <!--Settings context menu-->
+  <string name="settings_context_menu_edit">Edit</string>
+  <string name="settings_context_menu_delete">Delete</string>
 </resources>

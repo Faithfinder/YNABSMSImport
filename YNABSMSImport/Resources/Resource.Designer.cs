@@ -2492,6 +2492,9 @@ namespace YNABSMSImport
 			// aapt resource value: 0x7f090037
 			public const int SYM = 2131296311;
 			
+			// aapt resource value: 0x7f0900b1
+			public const int SomeText = 2131296433;
+			
 			// aapt resource value: 0x7f0900a1
 			public const int action0 = 2131296417;
 			
@@ -2584,6 +2587,9 @@ namespace YNABSMSImport
 			
 			// aapt resource value: 0x7f09008c
 			public const int btnManageSettings = 2131296396;
+			
+			// aapt resource value: 0x7f0900b2
+			public const int btn_SaveSetting = 2131296434;
 			
 			// aapt resource value: 0x7f090063
 			public const int buttonPanel = 2131296355;
@@ -2747,14 +2753,14 @@ namespace YNABSMSImport
 			// aapt resource value: 0x7f09009c
 			public const int lvSettingsList = 2131296412;
 			
-			// aapt resource value: 0x7f0900b3
-			public const int masked = 2131296435;
+			// aapt resource value: 0x7f0900b5
+			public const int masked = 2131296437;
 			
 			// aapt resource value: 0x7f0900a4
 			public const int media_actions = 2131296420;
 			
-			// aapt resource value: 0x7f0900b1
-			public const int message = 2131296433;
+			// aapt resource value: 0x7f0900b3
+			public const int message = 2131296435;
 			
 			// aapt resource value: 0x7f090031
 			public const int middle = 2131296305;
@@ -3002,8 +3008,8 @@ namespace YNABSMSImport
 			// aapt resource value: 0x7f090016
 			public const int view_offset_helper = 2131296278;
 			
-			// aapt resource value: 0x7f0900b2
-			public const int visible = 2131296434;
+			// aapt resource value: 0x7f0900b4
+			public const int visible = 2131296436;
 			
 			// aapt resource value: 0x7f09008d
 			public const int webview = 2131296397;
@@ -3254,10 +3260,13 @@ namespace YNABSMSImport
 			public const int select_dialog_singlechoice_material = 2130968636;
 			
 			// aapt resource value: 0x7f04003d
-			public const int support_simple_spinner_dropdown_item = 2130968637;
+			public const int setting_form = 2130968637;
 			
 			// aapt resource value: 0x7f04003e
-			public const int tooltip = 2130968638;
+			public const int support_simple_spinner_dropdown_item = 2130968638;
+			
+			// aapt resource value: 0x7f04003f
+			public const int tooltip = 2130968639;
 			
 			static Layout()
 			{

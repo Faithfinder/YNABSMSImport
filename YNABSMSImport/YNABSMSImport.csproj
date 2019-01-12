@@ -58,6 +58,7 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditSettingActivity.cs" />
     <Compile Include="ImportSettings\AddTransaction.cs" />
     <Compile Include="ImportSettings\AddTransactionBehaviour.cs" />
     <Compile Include="ImportSettings\ExtractionKeys.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="ImportSettings\UserSetting.cs" />
     <Compile Include="ManageSettingsActivity.cs" />
     <Compile Include="MilliunitExtensions.cs" />
+    <Compile Include="SettingsContextMenu.cs" />
     <Compile Include="SMSProcessor.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="SMSReceiver.cs" />
@@ -139,6 +141,12 @@
     <AndroidResource Include="Resources\layout\manage_settings.axml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\setting_form.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

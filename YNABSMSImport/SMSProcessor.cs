@@ -19,7 +19,7 @@ namespace YNABSMSImport
 
             var displayText = $"From: {address}, Text: {message}";
             NotifyUser(displayText);
-            var setting = await new SettingsManager().FindSettingAsync(address);
+            var setting = await new SettingsManager().FindSettingBySenderAsync(address);
 
             setting?.ProcessMessage(message);
         }

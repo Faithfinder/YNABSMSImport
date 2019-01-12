@@ -38,11 +38,18 @@ namespace YNABSMSImport.ImportSettings
                 _fileSystem.Directory.CreateDirectory(SettingsFolderPath);
         }
 
-        public string SettingsFolderPath { get; }
+        private string SettingsFolderPath { get; }
 
-        public async Task<UserSetting> FindSettingAsync(string sender)
+        public async Task<UserSetting> FindSettingBySenderAsync(string sender)
         {
-            var query = await QueryForSettings(sender);
+            var query = await QueryForSettingsBySender(sender);
+
+            return query.FirstOrDefault();
+        }
+
+        public async Task<UserSetting> FindSettingByIdAsync(string id)
+        {
+            var query = await QueryForSettingByID(id);
 
             return query.FirstOrDefault();
         }
@@ -85,7 +92,7 @@ namespace YNABSMSImport.ImportSettings
             return result;
         }
 
-        private Task<IEnumerable<UserSetting>> QueryForSettings(string sender)
+        private Task<IEnumerable<UserSetting>> QueryForSettingsBySender(string sender)
         {
             return Task.Run(() =>
                 from file in _settingsFolder.GetFiles()
@@ -93,6 +100,17 @@ namespace YNABSMSImport.ImportSettings
                 let value = file.OpenText().ReadToEnd()
                 let deserialized = TryDeserializeSetting(value)
                 where deserialized.Active && deserialized.Sender == sender
+                select deserialized
+            );
+        }
+
+        private Task<IEnumerable<UserSetting>> QueryForSettingByID(string id)
+        {
+            return Task.Run(() =>
+                from file in _settingsFolder.GetFiles()
+                where file.Name == id + ".json"
+                let value = file.OpenText().ReadToEnd()
+                let deserialized = TryDeserializeSetting(value)
                 select deserialized
             );
         }

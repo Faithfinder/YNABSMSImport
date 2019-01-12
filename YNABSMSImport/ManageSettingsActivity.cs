@@ -1,10 +1,10 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
-using System;
 using System.Collections.Generic;
 using YNABSMSImport.ImportSettings;
 
@@ -44,11 +44,10 @@ namespace YNABSMSImport
         private void SetUpFabAddSetting()
         {
             var fabAddSetting = FindViewById<FloatingActionButton>(Resource.Id.fabAddSetting);
-            fabAddSetting.Click += async (sender, e) => { //TODO creation
-                var setting = UserSetting.TemporaryOtkritie();
-                await new SettingsManager().SaveSettingAsync(setting);
-                settings.Add(setting);
-                adapter.NotifyDataSetChanged();
+            fabAddSetting.Click += (sender, e) =>
+            {
+                var intent = new Intent(this, typeof(EditSettingActivity));
+                StartActivity(intent);
             };
         }
 
@@ -68,9 +67,11 @@ namespace YNABSMSImport
             EditSetting(setting);
         }
 
-        private static void EditSetting(UserSetting setting)
+        private void EditSetting(UserSetting setting)
         {
-            Toast.MakeText(Application.Context, "Edit " + setting.Name, ToastLength.Long).Show(); //TODO editing
+            var intent = new Intent(this, typeof(EditSettingActivity));
+            intent.PutExtra("SettingID", setting.Id.ToString());
+            StartActivity(intent);
         }
 
         public override bool OnContextItemSelected(IMenuItem item)

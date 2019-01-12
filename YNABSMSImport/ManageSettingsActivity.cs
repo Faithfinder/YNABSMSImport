@@ -58,8 +58,8 @@ namespace YNABSMSImport
             var setting = settings[menuInfo.Position];
             e.Menu.SetHeaderTitle(setting.Name);
 
-            foreach (var pair in SettingsContextMenu())
-                e.Menu.Add(0, pair.Key, 0, pair.Value);
+            foreach (var pair in SettingsContextMenuWithLabels())
+                e.Menu.Add(0, (int)pair.Key, 0, pair.Value);
         }
 
         private void SettingsList_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -77,12 +77,12 @@ namespace YNABSMSImport
         {
             var menuInfo = item.MenuInfo as AdapterView.AdapterContextMenuInfo;
             var setting = settings[menuInfo.Position];
-            switch (item.ItemId)
+            switch ((SettingsContextMenu)item.ItemId)
             {
-                case 0:
+                case SettingsContextMenu.Edit:
                     EditSetting(setting);
                     break;
-                case 1:
+                case SettingsContextMenu.Delete:
                     DeleteSetting(setting, menuInfo.Position);
                     break;
                 default:
@@ -98,12 +98,12 @@ namespace YNABSMSImport
             adapter.NotifyDataSetChanged();
         }
 
-        private Dictionary<int, int> SettingsContextMenu()
+        private Dictionary<SettingsContextMenu, int> SettingsContextMenuWithLabels()
         {
-            return new Dictionary<int, int>
+            return new Dictionary<SettingsContextMenu, int>
             {
-                {0, Resource.String.settings_context_menu_edit },
-                {1, Resource.String.settings_context_menu_delete }
+                {SettingsContextMenu.Edit, Resource.String.settings_context_menu_edit },
+                {SettingsContextMenu.Delete, Resource.String.settings_context_menu_delete }
             };
         }
     }

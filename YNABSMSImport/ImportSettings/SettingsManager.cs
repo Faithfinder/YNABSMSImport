@@ -1,14 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Android.OS;
-
-using Newtonsoft.Json;
-
 using Environment = System.Environment;
 
 namespace YNABSMSImport.ImportSettings
@@ -57,7 +52,7 @@ namespace YNABSMSImport.ImportSettings
         public async Task SaveSettingAsync(UserSetting setting)
         {
             var filePath = _fileSystem.Path.Combine(SettingsFolderPath, $"{setting.Id}.json");
-            
+
             using (var writer = _fileSystem.File.CreateText(filePath))
             {
                 var serialized = JsonConvert.SerializeObject(setting, _serializerSettings);
@@ -79,17 +74,13 @@ namespace YNABSMSImport.ImportSettings
             return await QueryAllSettingsAsync();
         }
 
-        private async Task<IEnumerable<UserSetting>> QueryAllSettingsAsync()
+        private Task<IEnumerable<UserSetting>> QueryAllSettingsAsync()
         {
-            var tasks = from file in _settingsFolder.GetFiles()
-                        select file.OpenText().ReadToEndAsync();
-
-            var result = from json in await Task.WhenAll(tasks)
-                         let deserialized = TryDeserializeSetting(json)
-                         where deserialized.Active
-                         select deserialized;
-
-            return result;
+            return Task.Run(() => from file in _settingsFolder.GetFiles()
+                                  let value = file.OpenText().ReadToEnd()
+                                  let deserialized = TryDeserializeSetting(value)
+                                  where deserialized.Active
+                                  select deserialized);
         }
 
         private Task<IEnumerable<UserSetting>> QueryForSettingsBySender(string sender)
@@ -119,7 +110,10 @@ namespace YNABSMSImport.ImportSettings
         {
             try
             {
-                return JsonConvert.DeserializeObject<UserSetting>(fileContents, _serializerSettings);
+                var deserialized = JsonConvert.DeserializeObject<UserSetting>(fileContents, _serializerSettings);
+                if (deserialized == null)
+                    throw new ArgumentNullException();
+                return deserialized;
             }
             catch
             {

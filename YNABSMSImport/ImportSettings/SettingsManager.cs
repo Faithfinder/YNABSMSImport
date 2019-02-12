@@ -78,7 +78,7 @@ namespace YNABSMSImport.ImportSettings
         {
             return Task.Run(() => from file in _settingsFolder.GetFiles()
                                   let value = file.OpenText().ReadToEnd()
-                                  let deserialized = TryDeserializeSetting(value)
+                                  let deserialized = DeserializeSetting(value)
                                   where deserialized.Active
                                   select deserialized);
         }
@@ -89,7 +89,7 @@ namespace YNABSMSImport.ImportSettings
                 from file in _settingsFolder.GetFiles()
                 where file.Extension == ".json"
                 let value = file.OpenText().ReadToEnd()
-                let deserialized = TryDeserializeSetting(value)
+                let deserialized = DeserializeSetting(value)
                 where deserialized.Active && deserialized.Sender == sender
                 select deserialized
             );
@@ -101,25 +101,17 @@ namespace YNABSMSImport.ImportSettings
                 from file in _settingsFolder.GetFiles()
                 where file.Name == id + ".json"
                 let value = file.OpenText().ReadToEnd()
-                let deserialized = TryDeserializeSetting(value)
+                let deserialized = DeserializeSetting(value)
                 select deserialized
             );
         }
 
-        private UserSetting TryDeserializeSetting(string fileContents)
+        private UserSetting DeserializeSetting(string fileContents)
         {
-            try
-            {
-                var deserialized = JsonConvert.DeserializeObject<UserSetting>(fileContents, _serializerSettings);
-                if (deserialized == null)
-                    throw new ArgumentNullException();
-                return deserialized;
-            }
-            catch
-            {
-                Console.WriteLine("Met malformed file");
-                return new UserSetting();
-            }
+            var deserialized = JsonConvert.DeserializeObject<UserSetting>(fileContents, _serializerSettings);
+            if (deserialized == null)
+                throw new ArgumentNullException("File exists, but has no data");
+            return deserialized;
         }
     }
 }

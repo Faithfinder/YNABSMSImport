@@ -42,7 +42,8 @@ namespace YNABSMSImport
             }
             else
             {
-               return await new SettingsManager().FindSettingByIdAsync(settingID);
+                var setting = await new SettingsManager().FindSettingByIdAsync(settingID);
+                return setting ?? new UserSetting();
             }
         }
 

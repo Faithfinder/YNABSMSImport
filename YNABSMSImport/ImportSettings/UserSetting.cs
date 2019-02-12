@@ -10,6 +10,7 @@ namespace YNABSMSImport.ImportSettings
             Id = Guid.NewGuid();
             Active = true;
             Name = "";
+            Sender = "";
             Templates = new List<SMSTemplate>();
         }
 

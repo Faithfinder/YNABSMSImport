@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -77,9 +77,9 @@ namespace YNABSMSImport.ImportSettings
         private Task<IEnumerable<UserSetting>> QueryAllSettingsAsync()
         {
             return Task.Run(() => from file in _settingsFolder.GetFiles()
-                                  let value = file.OpenText().ReadToEnd()
+                                  let value = ReadFile(file)
                                   let deserialized = DeserializeSetting(value)
-                                  where deserialized.Active
+                                  where deserialized != null
                                   select deserialized);
         }
 
@@ -88,9 +88,9 @@ namespace YNABSMSImport.ImportSettings
             return Task.Run(() =>
                 from file in _settingsFolder.GetFiles()
                 where file.Extension == ".json"
-                let value = file.OpenText().ReadToEnd()
+                let value = ReadFile(file)
                 let deserialized = DeserializeSetting(value)
-                where deserialized.Active && deserialized.Sender == sender
+                where deserialized != null && deserialized.Active && deserialized.Sender == sender
                 select deserialized
             );
         }
@@ -100,17 +100,25 @@ namespace YNABSMSImport.ImportSettings
             return Task.Run(() =>
                 from file in _settingsFolder.GetFiles()
                 where file.Name == id + ".json"
-                let value = file.OpenText().ReadToEnd()
+                let value = ReadFile(file)
                 let deserialized = DeserializeSetting(value)
                 select deserialized
             );
         }
 
+        private string ReadFile(FileInfoBase file)
+        {
+            string result;
+            using (var stream = file.OpenText())
+            {
+                result = stream.ReadToEnd();
+            }
+            return result;
+        }
+
         private UserSetting DeserializeSetting(string fileContents)
         {
             var deserialized = JsonConvert.DeserializeObject<UserSetting>(fileContents, _serializerSettings);
-            if (deserialized == null)
-                throw new ArgumentNullException("File exists, but has no data");
             return deserialized;
         }
     }

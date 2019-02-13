@@ -1,4 +1,4 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
@@ -19,7 +19,7 @@ namespace YNABSMSImport
 
             var displayText = $"From: {address}, Text: {message}";
             NotifyUser(displayText);
-            var setting = await new SettingsManager().FindSettingBySenderAsync(address);
+            var setting = await new SettingsManager().FindActiveSettingBySenderAsync(address);
 
             setting?.ProcessMessage(message);
         }

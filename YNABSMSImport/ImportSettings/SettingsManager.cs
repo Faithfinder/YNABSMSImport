@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -35,9 +35,9 @@ namespace YNABSMSImport.ImportSettings
 
         private string SettingsFolderPath { get; }
 
-        public async Task<UserSetting> FindSettingBySenderAsync(string sender)
+        public async Task<UserSetting> FindActiveSettingBySenderAsync(string sender)
         {
-            var query = await QueryForSettingsBySender(sender);
+            var query = await QueryForActiveSettingsBySender(sender);
 
             return query.FirstOrDefault();
         }
@@ -83,7 +83,7 @@ namespace YNABSMSImport.ImportSettings
                                   select deserialized);
         }
 
-        private Task<IEnumerable<UserSetting>> QueryForSettingsBySender(string sender)
+        private Task<IEnumerable<UserSetting>> QueryForActiveSettingsBySender(string sender)
         {
             return Task.Run(() =>
                 from file in _settingsFolder.GetFiles()

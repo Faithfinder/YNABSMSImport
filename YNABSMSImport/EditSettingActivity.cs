@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
+using System;
+using System.Threading.Tasks;
 using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
@@ -50,11 +44,21 @@ namespace YNABSMSImport
         private void SetupSaveSettingButton()
         {
             var button = FindViewById<Button>(Resource.Id.btn_SaveSetting);
-            button.Click += async (sender, e) => {
-                var editText = FindViewById<EditText>(Resource.Id.SomeText);
-                setting.Name = editText.Text;
-                await new SettingsManager().SaveSettingAsync(setting);
-            };
+            button.Click += SaveSettingClickAsync;
+        }
+
+        private async void SaveSettingClickAsync(object sender, EventArgs e)
+        {
+            var editText = FindViewById<EditText>(Resource.Id.SomeText);
+            setting.Name = editText.Text;
+            var saveSettingTask = new SettingsManager().SaveSettingAsync(setting);
+            await saveSettingTask.ContinueWith((arg) =>
+            {
+                var handler = new Handler(Looper.MainLooper);
+                handler.Post(() => {
+                    Toast.MakeText(this, "Saved", ToastLength.Short).Show();
+                });
+            });
         }
     }
 }

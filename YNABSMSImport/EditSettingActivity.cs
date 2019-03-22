@@ -54,10 +54,7 @@ namespace YNABSMSImport
             var saveSettingTask = new SettingsManager().SaveSettingAsync(setting);
             await saveSettingTask.ContinueWith((arg) =>
             {
-                var handler = new Handler(Looper.MainLooper);
-                handler.Post(() => {
-                    Toast.MakeText(this, "Saved", ToastLength.Short).Show();
-                });
+                NotificationHelper.ShowToast(this, "Saved", ToastLength.Short);
             });
         }
     }

@@ -70,6 +70,7 @@
     <Compile Include="ImportSettings\UserSetting.cs" />
     <Compile Include="ManageSettingsActivity.cs" />
     <Compile Include="MilliunitExtensions.cs" />
+    <Compile Include="NotificationHelper.cs" />
     <Compile Include="SettingsContextMenu.cs" />
     <Compile Include="SMSProcessor.cs" />
     <Compile Include="MainActivity.cs" />

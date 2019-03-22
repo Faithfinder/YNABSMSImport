@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using Android.Widget;
+using System;
 using YNABSMSImport.ImportSettings;
 
 namespace YNABSMSImport
@@ -19,8 +20,8 @@ namespace YNABSMSImport
 
             var displayText = $"From: {address}, Text: {message}";
             NotifyUser(displayText);
-            var setting = await new SettingsManager().FindActiveSettingBySenderAsync(address);
 
+            var setting = await new SettingsManager().FindActiveSettingBySenderAsync(address);
             setting?.ProcessMessage(message);
         }
 
@@ -31,19 +32,14 @@ namespace YNABSMSImport
 
         private static void NotifyUser(string displayText)
         {
-            var handler = new Handler(Looper.MainLooper);
-            handler.Post(() =>
+            try
             {
-                Toast.MakeText(Application.Context, displayText, ToastLength.Long).Show();
-
-                var notification = new Notification.Builder(Application.Context, "Don't need now")
-                    .SetContentTitle("YNABImport")
-                    .SetContentText(displayText)
-                    .SetSmallIcon(Resource.Drawable.ic_stat_beach_access).Build();
-
-                var notificationManager = Application.Context.GetSystemService(NotificationService) as NotificationManager;
-                notificationManager?.Notify(0, notification);
-            });
+                NotificationHelper.ShowToast(Application.Context, displayText, ToastLength.Short);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
